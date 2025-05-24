@@ -483,13 +483,13 @@ class CompatibilityAnalyzer:
             'risk_factors': []
         }
 
-    def analyze_team_compatibility(self, team_file: str, candidate_files: List[str]) -> Dict[str, Any]:
+    def analyze_team_compatibility(self, team_data: Dict[str, Any], candidates_data_list: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Analyze compatibility between team and candidates.
         
         Args:
-            team_file: Path to team JSON file
-            candidate_files: List of paths to individual candidate JSON files
+            team_data: Dictionary containing team data
+            candidates_data_list: List of dictionaries containing individual candidate data
             
         Returns:
             Dict containing comprehensive compatibility analysis results
@@ -497,19 +497,10 @@ class CompatibilityAnalyzer:
         analysis_start_time = time.time()
         
         try:
-            # Load and validate data
-            logger.info("Loading team and candidate data...")
-            team_data = self.load_json_file(team_file)
-            
-            # Load all candidate files
-            all_candidates_data = []
-            for candidate_file in candidate_files:
-                candidate_data = self.load_json_file(str(candidate_file))
-                all_candidates_data.append(candidate_data)
-            
-            # Process team and candidates data
+            # Process team and candidates data (no file loading needed)
+            logger.info("Processing team and candidate data...")
             team_members = self.process_team_data(team_data)
-            candidates = self.process_candidates_data_from_individual_files(all_candidates_data)
+            candidates = self.process_candidates_data_from_individual_files(candidates_data_list)
             logger.info(f"Processing {len(team_members)} team members and {len(candidates)} candidates")
             
             # Estimate total time based on number of API calls needed
@@ -521,8 +512,6 @@ class CompatibilityAnalyzer:
             results = {
                 "analysis_metadata": {
                     "timestamp": datetime.now().isoformat(),
-                    "team_file": team_file,
-                    "candidates_files": [str(f) for f in candidate_files],
                     "team_size": len(team_members),
                     "candidates_count": len(candidates),
                     "analyzer_version": "2.1",

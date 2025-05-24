@@ -10,6 +10,7 @@ import os
 import sys
 import logging
 from pathlib import Path
+import json
 
 from compatibility_analyzer import CompatibilityAnalyzer
 from utils import print_results_summary
@@ -25,6 +26,15 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+def load_json_file(file_path: str) -> dict:
+    """Load and parse a JSON file."""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return json.load(file)
+    except Exception as e:
+        logger.error(f"Error loading file {file_path}: {e}")
+        raise
 
 def main():
     """Main execution function."""
@@ -54,8 +64,17 @@ def main():
         
         print(f"📁 Loading data files... Found {len(candidate_files)} candidate files")
         
-        # Perform analysis
-        results = analyzer.analyze_team_compatibility(team_file, candidate_files)
+        # Load team data
+        team_data = load_json_file(team_file)
+        
+        # Load all candidate data
+        candidates_data_list = []
+        for candidate_file in candidate_files:
+            candidate_data = load_json_file(str(candidate_file))
+            candidates_data_list.append(candidate_data)
+        
+        # Perform analysis with JSON data instead of file paths
+        results = analyzer.analyze_team_compatibility(team_data, candidates_data_list)
         
         # Print formatted results
         print_results_summary(results)
