@@ -48,39 +48,47 @@ class PersonalityTraitsExtractor:
         
         combined_responses = "\n\n".join(responses_text)
         
-        prompt = f"""
-        Analyze the following interview responses and extract Big Five personality traits. 
-        Provide scores between 0.0 and 1.0 for each trait based on the responses.
-
-        Interview Responses:
-        {combined_responses}
-
-        Big Five Personality Traits to assess:
-        - Openness: Willingness to experience new things, creativity, intellectual curiosity
-        - Conscientiousness: Organization, responsibility, dependability, persistence
-        - Extraversion: Sociability, assertiveness, energy level, tendency to seek stimulation
-        - Agreeableness: Cooperation, trust, empathy, concern for others
-        - Neuroticism: Emotional instability, anxiety, moodiness (higher = more neurotic)
-
-        Respond ONLY with a valid JSON object in this exact format:
-        {{
-            "openness": 0.75,
-            "conscientiousness": 0.85,
-            "extraversion": 0.60,
-            "agreeableness": 0.80,
-            "neuroticism": 0.30
-        }}
-        """
-        
         try:
             # Apply rate limiting before making request
             self.rate_limiter.wait_if_needed()
+            system_prompt = """
+            You are a personality assessment expert. Analyze interview responses and provide accurate Big Five personality trait scores.
+            """
+            system_prompt = """
+            You are a highly skilled organizational psychologist analyzing a candidate's interview transcript. Your task is to infer the
+            candidate's Big Five personality traits (Openness to Experience, Conscientiousness, Extraversion, Agreeableness, Neuroticism/Emotional Stability) based *solely* on their spoken responses.
+            """
+
+            prompt = f"""
+                    Analyze the following interview responses and extract Big Five personality traits. 
+                    Provide scores between 0.0 and 1.0 for each trait based on the responses.
+
+                    Interview Responses:
+                    {combined_responses}
+
+                    Big Five Personality Traits to assess:
+                    - Openness: Willingness to experience new things, creativity, intellectual curiosity
+                    - Conscientiousness: Organization, responsibility, dependability, persistence
+                    - Extraversion: Sociability, assertiveness, energy level, tendency to seek stimulation
+                    - Agreeableness: Cooperation, trust, empathy, concern for others
+                    - Neuroticism: Emotional instability, anxiety, moodiness (higher = more neurotic)
+
+                    Respond ONLY with a valid JSON object in this exact format:
+                    {{
+                        "openness": 0.75,
+                        "conscientiousness": 0.85,
+                        "extraversion": 0.60,
+                        "agreeableness": 0.80,
+                        "neuroticism": 0.30
+                    }}
+                    """
             
             response = self._make_api_request_with_retry(
                 #model=os.getenv('MISTRAL_MODEL', 'mistral-small-latest'),
                 model=os.getenv('OPENAI_MODEL', 'deepseek-chat'),
+                
                 messages=[
-                    {"role": "system", "content": "You are a personality assessment expert. Analyze interview responses and provide accurate Big Five personality trait scores."},
+                    {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
                 ],
                 response_format={"type": "json_object"},

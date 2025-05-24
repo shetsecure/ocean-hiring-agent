@@ -45,20 +45,26 @@ def test_health():
     """Test health endpoint."""
     try:
         response = requests.get("http://localhost:8000/health")
-        print(f"✅ Health check: {response.status_code} - {response.json()}")
+        print(f"✅ Health check: {response.status_code}")
+        print(f"   Response: {response.json()}")
         return True
     except Exception as e:
         print(f"❌ Health check failed: {e}")
+        if 'response' in locals():
+            print(f"   Response text: {response.text}")
         return False
 
 def test_status():
     """Test status endpoint."""
     try:
         response = requests.get("http://localhost:8000/status")
-        print(f"✅ Status check: {response.status_code} - {response.json()}")
+        print(f"✅ Status check: {response.status_code}")
+        print(f"   Response: {json.dumps(response.json(), indent=2)}")
         return True
     except Exception as e:
         print(f"❌ Status check failed: {e}")
+        if 'response' in locals():
+            print(f"   Response text: {response.text}")
         return False
 
 def test_create_interview():
@@ -70,14 +76,20 @@ def test_create_interview():
             "candidate_email": "test@example.com"
         }
         response = requests.post("http://localhost:8000/interviews", json=data)
-        result = response.json()
+        
         print(f"✅ Interview creation: {response.status_code}")
+        print(f"   Request data: {json.dumps(data, indent=2)}")
+        
         if response.status_code == 200:
-            print(f"   Agent ID: {result.get('agent_id')}")
-            print(f"   Interview Link: {result.get('interview_link')}")
+            result = response.json()
+            print(f"   Response: {json.dumps(result, indent=2)}")
+        else:
+            print(f"   Error response: {response.text}")
         return True
     except Exception as e:
         print(f"❌ Interview creation failed: {e}")
+        if 'response' in locals():
+            print(f"   Response text: {response.text}")
         return False
 
 def test_compatibility_analysis():
@@ -88,21 +100,27 @@ def test_compatibility_analysis():
             "candidates_data": CANDIDATES_DATA
         }
         print("🔄 Running compatibility analysis (this may take a moment due to AI processing)...")
+        print(f"   Request data: {json.dumps(data, indent=2)}")
+        
         response = requests.post("http://localhost:8000/analysis/compatibility", json=data)
+        
+        print(f"✅ Compatibility analysis: {response.status_code}")
         
         if response.status_code == 200:
             result = response.json()
-            print(f"✅ Compatibility analysis: {response.status_code}")
             print(f"   Team size: {result['analysis_metadata']['team_size']}")
             print(f"   Candidates: {result['analysis_metadata']['candidates_count']}")
             if result['candidates_analysis']:
                 first_candidate = result['candidates_analysis'][0]
-                print(f"   First candidate compatibility: {first_candidate['mathematical_analysis']['overall_compatibility']}")
+                print(f"   First candidate compatibility: {first_candidate['ai_analysis']['compatibility_score']}")
+            print(f"   Full response: {json.dumps(result, indent=2)}")
         else:
-            print(f"❌ Compatibility analysis failed: {response.status_code} - {response.text}")
+            print(f"   Error response: {response.text}")
         return True
     except Exception as e:
         print(f"❌ Compatibility analysis failed: {e}")
+        if 'response' in locals():
+            print(f"   Response text: {response.text}")
         return False
 
 def main():

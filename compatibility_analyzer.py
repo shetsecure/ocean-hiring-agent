@@ -185,8 +185,8 @@ class CompatibilityAnalyzer:
         
         return processed_candidates
 
-    def process_candidates_data_from_individual_files(self, candidates_data_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Extract personality traits from individual candidate files, handling different formats."""
+    def process_candidates_data(self, candidates_data_list: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Extract personality traits, handling different formats."""
         processed_candidates = []
         candidates_needing_extraction = []
         
@@ -242,82 +242,14 @@ class CompatibilityAnalyzer:
         
         return processed_candidates
 
-    def calculate_trait_compatibility(self, team_members: List[Dict[str, Any]], 
-                                   candidate: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Calculate comprehensive compatibility score based on personality traits.
-        
-        Args:
-            team_members: List of team members with traits
-            candidate: Candidate with traits
-            
-        Returns:
-            Dict with compatibility scores and analysis
-        """
-        candidate_traits = candidate['traits']
-        compatibility_scores = []
-        individual_scores = []
-        
-        # Calculate compatibility with each team member
-        for member in team_members:
-            member_traits = member['traits']
-            member_score = 0
-            trait_scores = {}
-            
-            for trait in ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism']:
-                if trait in candidate_traits and trait in member_traits:
-                    # For neuroticism, we want lower difference (both low neuroticism is good)
-                    if trait == 'neuroticism':
-                        # Penalize high neuroticism, reward stability
-                        diff = abs(candidate_traits[trait] - member_traits[trait])
-                        trait_compatibility = (1 - diff) * (1 - max(candidate_traits[trait], member_traits[trait]) * 0.5)
-                    else:
-                        # Standard similarity calculation for other traits
-                        diff = abs(candidate_traits[trait] - member_traits[trait])
-                        trait_compatibility = 1 - diff
-                    
-                    trait_scores[trait] = trait_compatibility
-                    member_score += trait_compatibility
-                else:
-                    logger.warning(f"Missing trait {trait} for member {member['name']} or candidate {candidate['name']}")
-                    trait_scores[trait] = 0.5  # Neutral score for missing traits
-                    member_score += 0.5
-            
-            member_score = member_score / 5  # Average across traits
-            compatibility_scores.append(member_score)
-            
-            individual_scores.append({
-                'member_name': member['name'],
-                'member_id': member['id'],
-                'overall_score': member_score,
-                'trait_scores': trait_scores
-            })
-        
-        # Calculate overall team compatibility
-        overall_score = statistics.mean(compatibility_scores)
-        min_score = min(compatibility_scores)
-        max_score = max(compatibility_scores)
-        score_variance = statistics.variance(compatibility_scores) if len(compatibility_scores) > 1 else 0
-        
-        return {
-            'overall_compatibility': overall_score,
-            'min_compatibility': min_score,
-            'max_compatibility': max_score,
-            'score_variance': score_variance,
-            'individual_compatibilities': individual_scores,
-            'team_harmony_indicator': 1 - score_variance  # Lower variance = better harmony
-        }
-
     def get_ai_compatibility_analysis(self, team_members: List[Dict[str, Any]], 
-                                   candidate: Dict[str, Any], 
-                                   math_scores: Dict[str, Any]) -> Dict[str, Any]:
+                                   candidate: Dict[str, Any]) -> Dict[str, Any]:
         """
         Get comprehensive AI-powered compatibility analysis using Mistral AI.
         
         Args:
             team_members: Team members data
             candidate: Candidate data
-            math_scores: Mathematical compatibility scores
             
         Returns:
             Dict containing AI-generated compatibility analysis
@@ -348,20 +280,24 @@ class CompatibilityAnalyzer:
                     interview_text.append(f"Q: {q}\nA: {a}")
             if interview_text:
                 interview_context = f"\n\nKey Interview Responses:\n" + "\n\n".join(interview_text)
+
+        system_prompt = """
+        You are a world-class team compatibility analyst and organizational psychologist.
+        Provide thorough, nuanced, and actionable analysis based on personality psychology and team dynamics research.
+        """
         
         prompt = f"""
-        As an expert team dynamics consultant and organizational psychologist, analyze the compatibility between this candidate and the existing software engineering team. Consider personality fit, collaboration potential, and team dynamics.
+        As an expert team dynamics consultant and organizational psychologist, analyze the compatibility between this candidate and the existing team.
+        Consider personality fit, collaboration potential, and team dynamics.
+        Provide a concise narrative-style summary of the candidate's overall soft skills and general personality.
+        Highlight key strengths and potential areas for development relevant to a team environment.
+        Also, identify any behavioral flags based on the conversation (e.g., "May avoid conflict", "Good under pressure").
 
         CURRENT TEAM:
         {team_summary_text}
 
         CANDIDATE:
         {candidate_summary}{interview_context}
-
-        MATHEMATICAL COMPATIBILITY SCORES:
-        - Overall Team Compatibility: {math_scores['overall_compatibility']:.3f}
-        - Team Harmony Indicator: {math_scores['team_harmony_indicator']:.3f}
-        - Score Range: {math_scores['min_compatibility']:.3f} - {math_scores['max_compatibility']:.3f}
 
         ANALYSIS FRAMEWORK:
         1. Personality Fit: How well do the candidate's traits complement the team?
@@ -387,7 +323,7 @@ class CompatibilityAnalyzer:
             "risk_factors": ["string"]              // 2-3 potential risks to monitor
         }}
         
-        Be specific, actionable, and balanced in your assessment. Consider both the mathematical scores and the qualitative aspects of personality and team fit.
+        Be specific, actionable, and balanced in your assessment. Consider the personality traits and qualitative aspects of team fit.
         """
 
         try:
@@ -400,7 +336,7 @@ class CompatibilityAnalyzer:
                 messages=[
                     {
                         "role": "system", 
-                        "content": "You are a world-class team compatibility analyst and organizational psychologist with expertise in software engineering teams. Provide thorough, nuanced, and actionable analysis based on personality psychology and team dynamics research."
+                        "content": system_prompt
                     },
                     {"role": "user", "content": prompt}
                 ],
@@ -417,7 +353,7 @@ class CompatibilityAnalyzer:
             
         except Exception as e:
             logger.error(f"Error in AI analysis: {str(e)}")
-            return self._get_fallback_analysis(math_scores['overall_compatibility'])
+            return self._get_fallback_analysis()
 
     def _make_api_request_with_retry(self, max_retries: int = 3, **kwargs):
         """Make API request with retry logic for rate limiting."""
@@ -456,27 +392,14 @@ class CompatibilityAnalyzer:
         
         return validated
 
-    def _get_fallback_analysis(self, math_score: float) -> Dict[str, Any]:
+    def _get_fallback_analysis(self) -> Dict[str, Any]:
         """Provide fallback analysis when AI analysis fails."""
-        if math_score >= 0.8:
-            summary = "High mathematical compatibility indicates strong potential fit."
-            strengths = ["Strong personality trait alignment", "Good mathematical compatibility score"]
-            concerns = ["AI analysis unavailable for deeper insights"]
-        elif math_score >= 0.6:
-            summary = "Moderate compatibility with room for growth and adaptation."
-            strengths = ["Reasonable personality trait alignment", "Potential for team contribution"]
-            concerns = ["Some personality differences to navigate", "AI analysis unavailable"]
-        else:
-            summary = "Lower compatibility may require additional consideration and support."
-            strengths = ["Opportunity for diverse perspectives"]
-            concerns = ["Significant personality trait differences", "May require additional team integration support"]
-        
         return {
-            'compatibility_score': math_score,
+            'compatibility_score': 0.5,
             'confidence_level': 0.3,  # Low confidence for fallback
-            'summary': summary,
-            'strengths': strengths,
-            'concerns': concerns,
+            'summary': "AI analysis unavailable",
+            'strengths': ["Fallback analysis"],
+            'concerns': ["AI analysis unavailable"],
             'recommendations': ["Conduct follow-up interviews", "Consider team integration plan"],
             'team_dynamics_impact': {},
             'development_opportunities': [],
@@ -485,11 +408,11 @@ class CompatibilityAnalyzer:
 
     def analyze_team_compatibility(self, team_data: Dict[str, Any], candidates_data_list: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Analyze compatibility between team and candidates.
+        Analyze compatibility between team and candidates using AI analysis only.
         
         Args:
-            team_data: Dictionary containing team data
-            candidates_data_list: List of dictionaries containing individual candidate data
+            team_data: Team data as dictionary
+            candidates_data_list: List of candidate data dictionaries
             
         Returns:
             Dict containing comprehensive compatibility analysis results
@@ -497,10 +420,9 @@ class CompatibilityAnalyzer:
         analysis_start_time = time.time()
         
         try:
-            # Process team and candidates data (no file loading needed)
-            logger.info("Processing team and candidate data...")
+            # Process team and candidates data
             team_members = self.process_team_data(team_data)
-            candidates = self.process_candidates_data_from_individual_files(candidates_data_list)
+            candidates = self.process_candidates_data(candidates_data_list)
             logger.info(f"Processing {len(team_members)} team members and {len(candidates)} candidates")
             
             # Estimate total time based on number of API calls needed
@@ -514,7 +436,8 @@ class CompatibilityAnalyzer:
                     "timestamp": datetime.now().isoformat(),
                     "team_size": len(team_members),
                     "candidates_count": len(candidates),
-                    "analyzer_version": "2.1",
+                    "analyzer_version": "3.0",
+                    "analysis_type": "ai_only",
                     "rate_limit_info": {
                         "requests_per_second": self.rate_limiter.requests_per_second,
                         "estimated_api_calls": api_calls_needed
@@ -536,11 +459,8 @@ class CompatibilityAnalyzer:
             for i, candidate in enumerate(candidates):
                 logger.info(f"🤖 AI analysis for candidate {i+1}/{len(candidates)}: {candidate['name']}")
                 
-                # Calculate mathematical compatibility
-                math_scores = self.calculate_trait_compatibility(team_members, candidate)
-                
                 # Get AI-powered analysis
-                ai_analysis = self.get_ai_compatibility_analysis(team_members, candidate, math_scores)
+                ai_analysis = self.get_ai_compatibility_analysis(team_members, candidate)
                 
                 # Combine analyses
                 candidate_result = {
@@ -551,23 +471,8 @@ class CompatibilityAnalyzer:
                         "traits_source": candidate.get('source', 'unknown'),
                         "personality_traits": {k: round(v, 3) for k, v in candidate['traits'].items()}
                     },
-                    "mathematical_analysis": {
-                        "overall_compatibility": round(math_scores['overall_compatibility'], 3),
-                        "team_harmony_indicator": round(math_scores['team_harmony_indicator'], 3),
-                        "compatibility_range": {
-                            "min": round(math_scores['min_compatibility'], 3),
-                            "max": round(math_scores['max_compatibility'], 3)
-                        },
-                        "individual_member_scores": [
-                            {
-                                "member": score['member_name'],
-                                "compatibility": round(score['overall_score'], 3)
-                            } for score in math_scores['individual_compatibilities']
-                        ]
-                    },
                     "ai_analysis": ai_analysis,
                     "overall_recommendation": self._generate_recommendation(
-                        math_scores['overall_compatibility'], 
                         ai_analysis['compatibility_score'],
                         ai_analysis['confidence_level']
                     )
@@ -586,9 +491,9 @@ class CompatibilityAnalyzer:
             logger.error(f"Error in compatibility analysis: {str(e)}")
             raise
 
-    def _generate_recommendation(self, math_score: float, ai_score: float, confidence: float) -> Dict[str, Any]:
+    def _generate_recommendation(self, ai_score: float, confidence: float) -> Dict[str, Any]:
         """Generate overall recommendation based on scores."""
-        combined_score = (math_score + ai_score) / 2
+        combined_score = ai_score
         
         if combined_score >= 0.8 and confidence >= 0.7:
             recommendation = "HIGHLY RECOMMENDED"
@@ -618,7 +523,7 @@ class CompatibilityAnalyzer:
         if not candidates_analysis:
             return {}
         
-        scores = [c["mathematical_analysis"]["overall_compatibility"] for c in candidates_analysis]
+        scores = [c["ai_analysis"]["compatibility_score"] for c in candidates_analysis]
         
         return {
             "candidate_pool_summary": {
@@ -631,7 +536,7 @@ class CompatibilityAnalyzer:
                 [
                     {
                         "name": c["candidate_info"]["name"],
-                        "compatibility": c["mathematical_analysis"]["overall_compatibility"],
+                        "compatibility": c["ai_analysis"]["compatibility_score"],
                         "recommendation": c["overall_recommendation"]["status"]
                     } for c in candidates_analysis
                 ],
