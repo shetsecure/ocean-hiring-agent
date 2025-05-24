@@ -1,0 +1,59 @@
+{
+  "candidate": {
+    "id": "SE5",
+    "name": "Carol Davis",
+    "position": "Software Engineer",
+    "responses": [
+      {
+        "question": "How do you approach learning new technologies or frameworks?",
+        "answer": "Honestly, I find most new technologies overly complicated and unnecessary. I learned Java in college and that's good enough for most things. Why should I waste my time learning something new when what I know already works? Companies change technologies too often just to keep up with trends.",
+        "trait": "Openness"
+      },
+      {
+        "question": "Tell me about your approach to project organization and meeting deadlines.",
+        "answer": "Deadlines are usually unrealistic anyway, so I don't stress too much about them. I work at my own pace and deliver when I can. I don't really use project management tools - they're too time consuming to set up. If managers want detailed tracking, they can do it themselves.",
+        "trait": "Conscientiousness"
+      },
+      {
+        "question": "How comfortable are you with presenting your work or leading meetings?",
+        "answer": "I really dislike presentations and public speaking. I'd rather just send an email with my updates. Meetings are usually pointless anyway - most people just like to hear themselves talk. I prefer to keep my head down and focus on coding rather than all this social stuff.",
+        "trait": "Extraversion"
+      },
+      {
+        "question": "Describe how you handle feedback and criticism from teammates.",
+        "answer": "I don't really like when people critique my code. I've been programming for years and I know what I'm doing. Most feedback is just personal opinion anyway. If people don't like my approach, they can write their own code. I'm not interested in endless debates about semicolons and variable names.",
+        "trait": "Agreeableness"
+      },
+      {
+        "question": "How do you handle stressful situations or tight deadlines at work?",
+        "answer": "I get really anxious when there's too much pressure. Sometimes I just can't think straight and make more mistakes. When I'm stressed, I tend to avoid people and just want to be left alone. I've called in sick a few times when the stress was too much. I don't work well under pressure.",
+        "trait": "Neuroticism"
+      },
+      {
+        "question": "What's your philosophy on code testing and quality assurance?",
+        "answer": "Testing takes forever and slows down development. If the code compiles and seems to work in my basic testing, that should be enough. Writing extensive tests is just busy work that doesn't add real value. QA teams should catch any issues - that's what they're paid for.",
+        "trait": "Conscientiousness"
+      },
+      {
+        "question": "How do you stay updated with industry developments and best practices?",
+        "answer": "I don't really follow tech news or blogs. Most of it is just marketing hype for new products. I learned the fundamentals years ago and they haven't really changed. If I need to know something specific, Google usually has the answer. I don't see the point in constantly learning new things.",
+        "trait": "Openness"
+      },
+      {
+        "question": "Tell me about your experience with collaborative development and teamwork.",
+        "answer": "I work better alone. Group coding sessions are chaotic and unproductive. Everyone has different opinions and it takes forever to agree on anything. I'd rather just be assigned my tasks and left alone to complete them. Too much collaboration leads to design by committee.",
+        "trait": "Extraversion"
+      },
+      {
+        "question": "How do you approach mentoring junior developers or knowledge sharing?",
+        "answer": "I don't really have time to babysit junior developers. They should learn on their own like I did. Explaining basic concepts over and over again is frustrating and takes away from my real work. If they can't figure things out, maybe they're not cut out for programming.",
+        "trait": "Agreeableness"
+      },
+      {
+        "question": "Describe your experience with handling production issues or system outages.",
+        "answer": "Production issues make me really nervous and I tend to panic. I usually hope someone else will handle it or that it will resolve itself. I'm not good at troubleshooting under pressure and I worry about making things worse. Sometimes I just log off and pretend I didn't see the alerts.",
+        "trait": "Neuroticism"
+      }
+    ]
+  }
+} 

@@ -1,0 +1,83 @@
+{
+    "team": [
+      {
+        "id": "T1",
+        "name": "Emma Dupont",
+        "position": "Senior Backend Engineer",
+        "big_five": {
+          "openness": 0.85,
+          "conscientiousness": 0.92,
+          "extraversion": 0.65,
+          "agreeableness": 0.78,
+          "neuroticism": 0.30
+        },
+        "summary": "Emma is a highly analytical engineer who enjoys exploring new technologies. She consistently delivers high-quality code and is known for her reliability and attention to detail."
+      },
+      {
+        "id": "T2",
+        "name": "Lucas Moreau",
+        "position": "Frontend Developer",
+        "big_five": {
+          "openness": 0.80,
+          "conscientiousness": 0.75,
+          "extraversion": 0.88,
+          "agreeableness": 0.82,
+          "neuroticism": 0.40
+        },
+        "summary": "Lucas brings creativity and enthusiasm to the team. His strong communication skills and collaborative nature make him a valuable team player."
+      },
+      {
+        "id": "T3",
+        "name": "Sophie Martin",
+        "position": "DevOps Engineer",
+        "big_five": {
+          "openness": 0.70,
+          "conscientiousness": 0.95,
+          "extraversion": 0.60,
+          "agreeableness": 0.68,
+          "neuroticism": 0.35
+        },
+        "summary": "Sophie is meticulous and highly organized, ensuring system reliability and efficiency. She thrives in structured environments and is adept at problem-solving under pressure."
+      },
+      {
+        "id": "T4",
+        "name": "Antoine Lefevre",
+        "position": "Full Stack Developer",
+        "big_five": {
+          "openness": 0.90,
+          "conscientiousness": 0.85,
+          "extraversion": 0.70,
+          "agreeableness": 0.75,
+          "neuroticism": 0.25
+        },
+        "summary": "Antoine is a versatile developer with a passion for learning. He adapts quickly to new challenges and fosters positive team dynamics through his approachable demeanor."
+      },
+      {
+        "id": "T5",
+        "name": "Camille Rousseau",
+        "position": "UI/UX Designer",
+        "big_five": {
+          "openness": 0.95,
+          "conscientiousness": 0.78,
+          "extraversion": 0.75,
+          "agreeableness": 0.85,
+          "neuroticism": 0.20
+        },
+        "summary": "Camille is a creative visionary with exceptional design intuition. She excels at translating user needs into elegant interfaces and collaborates seamlessly with development teams to ensure pixel-perfect implementations."
+      },
+      {
+        "id": "T6",
+        "name": "Thomas Bernard",
+        "position": "QA Engineer",
+        "big_five": {
+          "openness": 0.65,
+          "conscientiousness": 0.98,
+          "extraversion": 0.55,
+          "agreeableness": 0.72,
+          "neuroticism": 0.15
+        },
+        "summary": "Thomas is exceptionally detail-oriented with a methodical approach to quality assurance. His systematic testing strategies and proactive bug prevention mindset ensure robust, reliable software delivery."
+      }
+    ]
+  }
+  

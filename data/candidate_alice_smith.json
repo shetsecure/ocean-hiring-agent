@@ -1,0 +1,49 @@
+{
+  "candidate": {
+    "id": "SE1",
+    "name": "Alice Smith",
+    "position": "Software Engineer",
+    "responses": [
+      {
+        "question": "How do you approach learning new programming languages or frameworks?",
+        "answer": "I usually start with online tutorials and follow along with the examples. I read the documentation and try to build a small project to practice. It takes me a while to get comfortable with new technologies, but I eventually get there. I prefer sticking with what I know works well.",
+        "trait": "Openness"
+      },
+      {
+        "question": "Describe your process for managing and organizing your code projects.",
+        "answer": "I try to keep my code organized with decent folder structures. I write some documentation, though I sometimes forget to update it when I make changes. I use version control and try to make meaningful commit messages most of the time. I test my code before pushing it, usually manually but sometimes with automated tests.",
+        "trait": "Conscientiousness"
+      },
+      {
+        "question": "How comfortable are you with public speaking or presenting your work?",
+        "answer": "I'm okay with presenting to small groups, though I get a bit nervous with larger audiences. I prefer written communication over verbal when possible. I can do presentations when required but I usually keep them short and to the point. I'm better at one-on-one discussions than group presentations.",
+        "trait": "Extraversion"
+      },
+      {
+        "question": "Tell me about a time you had to collaborate on a challenging project.",
+        "answer": "I worked on a team project where we had to integrate multiple systems. There were some disagreements about the approach, but we eventually found a solution that worked for everyone. I contributed my part and helped others when they asked. The project was successful, though it took longer than we initially planned.",
+        "trait": "Agreeableness"
+      },
+      {
+        "question": "How do you handle tight deadlines and pressure at work?",
+        "answer": "Deadlines make me a bit anxious, but I manage by breaking things down into smaller tasks. I sometimes work extra hours to make sure everything gets done. I try to communicate early if I think I might miss a deadline. The pressure can be stressful but I usually manage to deliver what's needed.",
+        "trait": "Neuroticism"
+      },
+      {
+        "question": "What's your approach to writing maintainable code?",
+        "answer": "I try to write code that's easy to understand and add comments where necessary. I attempt to follow best practices, though I'm not always sure what the best approach is for every situation. I refactor code when it gets too messy, but sometimes I put it off if there are more pressing tasks.",
+        "trait": "Conscientiousness"
+      },
+      {
+        "question": "How do you typically approach problem-solving in your development work?",
+        "answer": "I start by understanding the problem and then think through possible solutions. I often look up similar problems online to see how others have solved them. If I get stuck, I'll ask a colleague for advice. I test different approaches until I find something that works reasonably well.",
+        "trait": "Openness"
+      },
+      {
+        "question": "Describe your experience working in team environments.",
+        "answer": "I work well with others and try to be helpful when team members have questions. I participate in meetings and share my ideas when appropriate. I don't usually take leadership roles but I'm reliable and complete my assigned tasks. I prefer clear direction rather than ambiguous requirements.",
+        "trait": "Extraversion"
+      }
+    ]
+  }
+} 

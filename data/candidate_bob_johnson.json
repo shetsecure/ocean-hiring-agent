@@ -1,0 +1,49 @@
+{
+  "candidate": {
+    "id": "SE2",
+    "name": "Bob Johnson",
+    "position": "Software Engineer",
+    "responses": [
+      {
+        "question": "Can you describe a time when you had to learn a new technology quickly?",
+        "answer": "I was assigned to a project requiring knowledge of Docker. I took an online course over a weekend and practiced by containerizing a few small applications. It went okay, though I had to ask for help with some of the networking concepts. I got the job done but it took longer than I initially estimated.",
+        "trait": "Openness"
+      },
+      {
+        "question": "How do you ensure your code is reliable and maintainable?",
+        "answer": "I try to follow coding standards and write comments when I remember to. I usually write some unit tests, though I don't always have time to get full coverage. I do code reviews when they're required and try to keep functions reasonably small. Sometimes I go back and refactor code if it gets too messy.",
+        "trait": "Conscientiousness"
+      },
+      {
+        "question": "Do you prefer working alone or in a team?",
+        "answer": "I prefer working independently most of the time because I can focus better. I participate in team meetings when necessary and update everyone on my progress. I'm okay with collaboration but I find too many meetings can be distracting from actual coding work.",
+        "trait": "Extraversion"
+      },
+      {
+        "question": "How do you handle disagreements in a team setting?",
+        "answer": "I usually present my viewpoint with whatever data I have and listen to others. If the team decides to go a different direction, I'll go along with it even if I'm not entirely convinced. I don't like conflict so I try to avoid arguments and find middle ground when possible.",
+        "trait": "Agreeableness"
+      },
+      {
+        "question": "Describe a stressful situation at work and how you handled it.",
+        "answer": "We had a tight deadline once and I had to work some overtime to get everything done. I prioritized the most important features and communicated with my manager about what might not make it. It was stressful but manageable. I delivered most of what was requested, though a few nice-to-have features had to be postponed.",
+        "trait": "Neuroticism"
+      },
+      {
+        "question": "Tell me about your approach to debugging and problem-solving.",
+        "answer": "When I encounter a bug, I usually start by reproducing it and then look through the logs. I use the debugger when needed and sometimes add print statements to understand what's happening. If I'm stuck for too long, I'll ask a colleague for help or search Stack Overflow for similar issues.",
+        "trait": "Conscientiousness"
+      },
+      {
+        "question": "How do you stay current with new technologies and industry trends?",
+        "answer": "I read some tech blogs occasionally and browse Reddit programming communities. I attend company lunch-and-learns when they're offered. I've taken a few online courses but I don't always finish them if they get too time-consuming. I try to learn new things but work keeps me pretty busy.",
+        "trait": "Openness"
+      },
+      {
+        "question": "Describe your experience with code reviews and receiving feedback.",
+        "answer": "I participate in code reviews when they're scheduled. I try to give constructive feedback but I'm not always sure what to look for beyond obvious bugs. When I receive feedback, I usually make the requested changes. Sometimes I disagree with suggestions but I don't always speak up about it.",
+        "trait": "Agreeableness"
+      }
+    ]
+  }
+} 

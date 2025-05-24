@@ -1,0 +1,54 @@
+{
+  "candidate": {
+    "id": "SE3",
+    "name": "David Lee",
+    "position": "Software Engineer",
+    "responses": [
+      {
+        "question": "Tell me about your experience learning new technologies.",
+        "answer": "I don't really like learning new things unless I absolutely have to. Most new frameworks are just reinventing the wheel anyway. I stick with what I know because it works fine. Why fix something that isn't broken? Change for the sake of change is pointless.",
+        "trait": "Openness"
+      },
+      {
+        "question": "How do you approach project planning and organization?",
+        "answer": "I usually just start coding and figure it out as I go. Planning takes too much time and things always change anyway. I don't really use project management tools - they're too complicated. I keep track of things in my head mostly. Documentation is boring and nobody reads it anyway.",
+        "trait": "Conscientiousness"
+      },
+      {
+        "question": "Describe your communication style in a team environment.",
+        "answer": "I prefer to work alone. Team meetings are mostly a waste of time and interrupt my coding flow. I only speak up if I really have to. Email is fine for most communication. I don't see the point in all these stand-ups and check-ins - just let me code.",
+        "trait": "Extraversion"
+      },
+      {
+        "question": "How do you handle conflicts or disagreements with colleagues?",
+        "answer": "If someone disagrees with my approach, they're probably wrong. I've been doing this for a while and I know what works. I don't have time to explain everything to people who don't get it. If they want to do things the hard way, that's their problem.",
+        "trait": "Agreeableness"
+      },
+      {
+        "question": "Tell me about a time you faced a stressful deadline or technical challenge.",
+        "answer": "I hate tight deadlines - they just lead to bad code and stress. When things get stressful, I usually just get frustrated and take breaks. Sometimes I call in sick if the pressure gets too much. These unrealistic timelines are always management's fault anyway.",
+        "trait": "Neuroticism"
+      },
+      {
+        "question": "What's your approach to code quality and testing?",
+        "answer": "Tests are mostly a waste of time. If the code works, it works. I don't have time to write a bunch of tests that just repeat what the code already does. Code reviews are just nitpicking - if it compiles and runs, ship it. Over-engineering is a bigger problem than under-testing.",
+        "trait": "Conscientiousness"
+      },
+      {
+        "question": "How do you stay current with industry trends and best practices?",
+        "answer": "Most of these new trends are just hype. I learned what I needed to learn years ago and it still works fine. I don't waste time reading blogs or going to conferences. Stack Overflow has all the answers if I really need something. These influencer developers just complicate simple things.",
+        "trait": "Openness"
+      },
+      {
+        "question": "Describe your experience with code reviews and collaborative development.",
+        "answer": "Code reviews usually slow everything down. Most feedback is just personal preference anyway. I don't like people looking over my shoulder and questioning my decisions. If they don't trust me to write good code, why did they hire me? I prefer to work on my own features without interference.",
+        "trait": "Agreeableness"
+      },
+      {
+        "question": "How do you handle debugging and troubleshooting complex issues?",
+        "answer": "Debugging is the worst part of the job. I usually just try random things until something works. If I can't figure it out quickly, I'll just rewrite the whole thing - it's faster than trying to understand someone else's messy code. Sometimes I just ignore minor bugs if they don't seem critical.",
+        "trait": "Neuroticism"
+      }
+    ]
+  }
+} 
