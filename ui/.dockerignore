@@ -1,0 +1,41 @@
+# Ignore Python cache and virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+.env
+
+# Ignore development files
+.git/
+.gitignore
+*.md
+README.md
+
+# Ignore test files
+test_*.py
+*_test.py
+quick_test.py
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore logs
+*.log
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore documentation
+DASHBOARD_SUMMARY.md
+COMPATIBILITY_FIX.md
+
+# Ignore shell scripts
+*.sh 

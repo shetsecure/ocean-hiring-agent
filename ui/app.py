@@ -11,9 +11,15 @@ app = Flask(__name__)
 def load_dashboard_data_api():
     """Load dashboard data by calling the API endpoint"""
     try:
-        # Load team data - try both relative paths
+        # Load team data - try different paths for Docker and local development
         team_data_path = None
-        for path in ['../data/team.json', 'data/team.json']:
+        possible_team_paths = [
+            'data/team.json',  # Docker mounted volume
+            '../data/team.json',  # Local development from ui folder
+            'team.json'  # Current directory
+        ]
+        
+        for path in possible_team_paths:
             if os.path.exists(path):
                 team_data_path = path
                 break
@@ -49,9 +55,10 @@ def load_dashboard_data_api():
         
         response = requests.post(api_url, json=payload, headers=headers, timeout=300)
         response.raise_for_status()  # Raise an exception for bad status codes
+        
         # Save API response to compatibility_scores.json
         output_path = os.path.join(data_dir, 'compatibility_scores.json')
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else '.', exist_ok=True)
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(response.json(), f, indent=2)
         return response.json()
@@ -76,18 +83,35 @@ def load_dashboard_data_api():
 def load_dashboard_data():
     """Load the dashboard data from JSON file or API"""
     try:
-        data_path = os.path.join('..', 'data', 'compatibility_scores.json')
-        with open(data_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        # Try relative to ui folder
-        try:
-            with open('../data/compatibility_scores.json', 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except FileNotFoundError:
-            # Fallback to API call if local file not found
-            print("Local compatibility_scores.json not found, trying API...")
-            return load_dashboard_data_api()
+        # Try different paths for compatibility_scores.json
+        possible_paths = [
+            'data/compatibility_scores.json',  # Docker mounted volume
+            '../data/compatibility_scores.json',  # Local development
+            'compatibility_scores.json'  # Current directory
+        ]
+        
+        for data_path in possible_paths:
+            if os.path.exists(data_path):
+                with open(data_path, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+        
+        # If no local file found, fallback to API call
+        print("Local compatibility_scores.json not found, trying API...")
+        return load_dashboard_data_api()
+        
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        # Fallback to API call if local file read fails
+        return load_dashboard_data_api()
+
+@app.route('/health')
+def health_check():
+    """Health check endpoint for Docker"""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'Team Compatibility Dashboard UI',
+        'version': '1.0.0'
+    }), 200
 
 @app.route('/')
 def dashboard():

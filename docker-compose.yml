@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    container_name: compatibility-dashboard-ui
+    ports:
+      - "5005:5005"
+    volumes:
+      # Mount the data folder from host to container
+      - ./data:/app/data:ro  # Read-only mount since UI only reads data
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=0
+    restart: unless-stopped
+    networks:
+      - compatibility-network
+
+  # Optional: Add the API service if needed
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.api  # You can create this later
+  #   container_name: compatibility-api
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ./data:/app/data
+  #   environment:
+  #     - PYTHONPATH=/app
+  #   restart: unless-stopped
+  #   networks:
+  #     - compatibility-network
+
+networks:
+  compatibility-network:
+    driver: bridge
+
+volumes:
+  # Define named volume for data persistence (optional)
+  data-volume:
+    driver: local 
