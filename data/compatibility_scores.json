@@ -1,28 +1,20 @@
 {
   "analysis_metadata": {
-    "timestamp": "2025-05-24T21:55:50.993992",
-    "team_file": "data/team.json",
-    "candidates_files": [
-      "data/candidate_david_lee.json",
-      "data/candidate_bob_johnson.json",
-      "data/candidate_carol_davis.json",
-      "data/candidate_alice_smith.json",
-      "data/candidate_mohammed_elasri.json",
-      "data/candidate_amine_marzouki.json"
-    ],
+    "timestamp": "2025-05-24T23:38:17.010684",
     "team_size": 6,
     "candidates_count": 6,
-    "analyzer_version": "2.1",
+    "analyzer_version": "3.0",
+    "analysis_type": "ai_only",
     "rate_limit_info": {
-      "requests_per_second": 10.0,
+      "requests_per_second": 1.0,
       "estimated_api_calls": 12
     },
     "rate_limiter_stats": {
-      "total_requests": 12,
-      "requests_per_second_limit": 10.0,
-      "total_wait_time": 0
+      "total_requests": 48,
+      "requests_per_second_limit": 1.0,
+      "total_wait_time": 10.708722114562988
     },
-    "total_analysis_time": 176.84
+    "total_analysis_time": 187.03
   },
   "team_summary": {
     "members": [
@@ -109,76 +101,43 @@
           "neuroticism": 0.8
         }
       },
-      "mathematical_analysis": {
-        "overall_compatibility": 0.39,
-        "team_harmony_indicator": 0.999,
-        "compatibility_range": {
-          "min": 0.342,
-          "max": 0.44
-        },
-        "individual_member_scores": [
-          {
-            "member": "Emma Dupont",
-            "compatibility": 0.38
-          },
-          {
-            "member": "Lucas Moreau",
-            "compatibility": 0.382
-          },
-          {
-            "member": "Sophie Martin",
-            "compatibility": 0.44
-          },
-          {
-            "member": "Antoine Lefevre",
-            "compatibility": 0.374
-          },
-          {
-            "member": "Camille Rousseau",
-            "compatibility": 0.342
-          },
-          {
-            "member": "Thomas Bernard",
-            "compatibility": 0.422
-          }
-        ]
-      },
       "ai_analysis": {
-        "compatibility_score": 0.25,
+        "compatibility_score": 0.3,
         "confidence_level": 0.85,
-        "summary": "David Lee's low openness and conscientiousness, combined with high neuroticism, present significant challenges to team compatibility and dynamics. His preference for solitary work and resistance to change and planning are at odds with the team's collaborative and adaptive culture.",
+        "summary": "David Lee's low openness and conscientiousness, combined with high neuroticism, suggest a poor fit with the current team's dynamic and values. His preference for working alone and resistance to change and planning could hinder collaboration and project success.",
         "strengths": [
-          "Potential for deep focus on specific tasks without frequent interruptions.",
-          "May bring a different perspective on problem-solving due to his preference for established methods.",
-          "Low extraversion could mean fewer distractions for the team during focused work periods."
+          "May perform well in stable, unchanging environments where deep focus is required.",
+          "Potential to bring a different perspective due to his resistance to change, challenging the team to justify innovations.",
+          "Low extraversion might mean fewer distractions for the team during deep work phases."
         ],
         "concerns": [
-          "Resistance to learning new technologies could hinder team innovation and adaptability.",
-          "Lack of engagement in team communication and planning processes may lead to misalignment and inefficiencies.",
-          "High neuroticism could introduce stress or negativity into the team environment."
+          "Significant resistance to learning new technologies and methodologies, which could stall team progress.",
+          "Poor project planning and organization skills may lead to missed deadlines and increased workload for teammates.",
+          "Low agreeableness and preference for solitary work could disrupt team cohesion and communication."
         ],
         "recommendations": [
-          "Consider a trial period with clear expectations around participation in team meetings and use of project management tools.",
-          "Pair with a mentor from the team to encourage openness to new technologies and methodologies.",
-          "Evaluate the impact on team morale and productivity closely during the initial months."
+          "Consider a trial period with clear, structured tasks that require minimal collaboration to assess actual performance and adaptability.",
+          "Pair with a mentor from the team to gradually introduce him to team processes and the value of collaboration and planning.",
+          "Provide specific, constructive feedback on the importance of documentation and planning in team projects.",
+          "Evaluate the team's capacity to accommodate and potentially benefit from his unique working style without compromising overall productivity."
         ],
         "team_dynamics_impact": {
-          "likely_role": "Isolated contributor, potentially working on well-defined, standalone tasks.",
-          "collaboration_style": "Minimal interaction, preferring to work independently with infrequent updates.",
-          "influence_on_team": "Could strain team cohesion and slow down collective innovation and adaptability."
+          "likely_role": "Isolated contributor on well-defined, stable tasks requiring minimal team interaction.",
+          "collaboration_style": "Minimalist; prefers to work alone and communicate only when necessary, potentially through written forms like email.",
+          "influence_on_team": "Could introduce friction due to differing values on innovation, planning, and teamwork, possibly leading to decreased morale if not managed carefully."
         },
         "development_opportunities": [
-          "Encourage gradual exposure to new technologies within a supportive, non-judgmental framework.",
-          "Develop communication and teamwork skills through structured, low-pressure team activities."
+          "Enhancing openness to new technologies and methodologies through targeted learning and development programs.",
+          "Improving project management and organizational skills with hands-on training and mentorship."
         ],
         "risk_factors": [
-          "Potential for decreased team morale due to perceived lack of contribution or engagement.",
-          "Risk of project delays or quality issues from inadequate planning and documentation."
+          "High risk of becoming a bottleneck in projects requiring adaptability and teamwork.",
+          "Potential for increased team conflict due to differing work styles and values."
         ]
       },
       "overall_recommendation": {
         "status": "NOT RECOMMENDED",
-        "combined_score": 0.32,
+        "combined_score": 0.3,
         "reasoning": "Significant compatibility concerns across multiple dimensions.",
         "confidence_level": 0.85
       }
@@ -197,78 +156,44 @@
           "neuroticism": 0.4
         }
       },
-      "mathematical_analysis": {
-        "overall_compatibility": 0.842,
-        "team_harmony_indicator": 1.0,
-        "compatibility_range": {
-          "min": 0.812,
-          "max": 0.868
-        },
-        "individual_member_scores": [
-          {
-            "member": "Emma Dupont",
-            "compatibility": 0.846
-          },
-          {
-            "member": "Lucas Moreau",
-            "compatibility": 0.86
-          },
-          {
-            "member": "Sophie Martin",
-            "compatibility": 0.868
-          },
-          {
-            "member": "Antoine Lefevre",
-            "compatibility": 0.826
-          },
-          {
-            "member": "Camille Rousseau",
-            "compatibility": 0.812
-          },
-          {
-            "member": "Thomas Bernard",
-            "compatibility": 0.838
-          }
-        ]
-      },
       "ai_analysis": {
-        "compatibility_score": 0.85,
-        "confidence_level": 0.9,
-        "summary": "Bob Johnson shows a strong potential fit with the existing software engineering team, with notable alignment in conscientiousness and agreeableness. His preference for independent work complements the team's dynamic, though his lower extraversion may require adjustments in collaboration practices.",
+        "compatibility_score": 0.75,
+        "confidence_level": 0.85,
+        "summary": "Bob Johnson presents a balanced fit for the team, with a strong agreeableness score that suggests good interpersonal skills, though his preference for independent work may require adjustment in a collaborative environment. His conscientiousness and openness levels align well with the team's dynamics, indicating potential for effective integration and contribution.",
         "strengths": [
-          "High agreeableness aligns well with the team's collaborative culture.",
-          "Conscientiousness score is in harmony with the team's emphasis on reliability and maintainability.",
-          "Openness to learning new technologies, as demonstrated by his initiative to learn Docker, matches the team's innovative spirit."
+          "High agreeableness suggests good potential for harmonious team interactions.",
+          "Moderate openness indicates a willingness to learn and adapt to new technologies, as evidenced by his Docker learning experience.",
+          "Conscientiousness level is compatible with the team's high standards for reliability and maintainability."
         ],
         "concerns": [
-          "Preference for working independently may limit spontaneous collaboration opportunities.",
-          "Lower extraversion could make it challenging to engage in team-building activities.",
-          "Admission of sometimes overlooking full test coverage and comments could raise concerns about code quality standards."
+          "Preference for working independently may limit spontaneous collaboration and idea exchange.",
+          "Moderate extraversion could result in less proactive communication in team settings.",
+          "Admission to sometimes skipping full test coverage and refactoring only when necessary may raise concerns about code quality standards."
         ],
         "recommendations": [
-          "Encourage participation in regular, structured team meetings to foster collaboration without overwhelming him.",
-          "Pair him with a mentor, possibly Emma or Antoine, to enhance his engagement with the team and refine his coding practices.",
-          "Introduce gradual responsibilities in collaborative projects to balance his independent work preference with team needs."
+          "Encourage participation in more collaborative projects to enhance team integration.",
+          "Provide structured opportunities for code review and pair programming to improve code quality practices.",
+          "Monitor and support his adaptation to the team's communication and meeting culture to ensure it doesn't hinder his performance or team cohesion."
         ],
         "team_dynamics_impact": {
-          "likely_role": "Independent contributor with specialized tasks that require deep focus.",
-          "collaboration_style": "Structured and scheduled interactions, preferring clear objectives and minimal distractions.",
-          "influence_on_team": "May encourage a more focused and disciplined approach to coding standards, though could benefit from adopting more collaborative practices."
+          "likely_role": "Reliable contributor who excels in tasks requiring focused, independent work.",
+          "collaboration_style": "Will collaborate effectively when required but may not initiate team interactions spontaneously.",
+          "influence_on_team": "Likely to maintain or slightly enhance the team's current harmony without significantly altering its dynamics."
         },
         "development_opportunities": [
-          "Enhancing collaborative coding practices through pair programming sessions.",
-          "Expanding knowledge in DevOps practices to work more closely with Sophie on deployment strategies."
+          "Enhancing collaborative skills through team-based projects and mentorship.",
+          "Improving code quality practices, such as comprehensive testing and proactive refactoring, through targeted training and peer learning."
         ],
         "risk_factors": [
-          "Potential isolation from the team due to strong independent work preference.",
-          "Risk of underutilizing his potential for collaboration if not properly integrated into team dynamics."
+          "Potential isolation due to preference for independent work, which could affect team cohesion if not managed.",
+          "Risk of undercommunication leading to misalignments or delays in collaborative tasks."
         ]
       },
       "overall_recommendation": {
-        "status": "HIGHLY RECOMMENDED",
-        "combined_score": 0.846,
-        "reasoning": "Strong compatibility across multiple assessment dimensions.",
-        "confidence_level": 0.9
+        "status": "RECOMMENDED",
+        "combined_score": 0.75,
+        "reasoning": "Good compatibility with positive indicators for team fit.",
+        "confidence_level": 0.85
       }
     },
     {
@@ -285,76 +210,42 @@
           "neuroticism": 0.8
         }
       },
-      "mathematical_analysis": {
-        "overall_compatibility": 0.39,
-        "team_harmony_indicator": 0.999,
-        "compatibility_range": {
-          "min": 0.342,
-          "max": 0.44
-        },
-        "individual_member_scores": [
-          {
-            "member": "Emma Dupont",
-            "compatibility": 0.38
-          },
-          {
-            "member": "Lucas Moreau",
-            "compatibility": 0.382
-          },
-          {
-            "member": "Sophie Martin",
-            "compatibility": 0.44
-          },
-          {
-            "member": "Antoine Lefevre",
-            "compatibility": 0.374
-          },
-          {
-            "member": "Camille Rousseau",
-            "compatibility": 0.342
-          },
-          {
-            "member": "Thomas Bernard",
-            "compatibility": 0.422
-          }
-        ]
-      },
       "ai_analysis": {
-        "compatibility_score": 0.35,
+        "compatibility_score": 0.3,
         "confidence_level": 0.85,
-        "summary": "Carol Davis's low openness, conscientiousness, and agreeableness, coupled with high neuroticism, suggest significant challenges in personality fit and collaboration potential with the current team. Her reluctance to adapt to new technologies and disinterest in team interactions may hinder team dynamics and project progress.",
+        "summary": "Carol Davis exhibits a low compatibility with the current team, primarily due to her resistance to learning new technologies, lack of enthusiasm for collaboration, and high neuroticism. Her approach to deadlines and project organization may challenge the team's high conscientiousness and openness to new ideas.",
         "strengths": [
-          "Potential for deep focus on coding tasks without distraction from social interactions.",
-          "May bring a different perspective on problem-solving due to her resistance to new technologies.",
-          "Low extraversion could mean less conflict in a team that values harmony."
+          "May excel in environments requiring deep focus on familiar tasks without frequent changes.",
+          "Potential to contribute to stable, long-term projects with minimal technological shifts.",
+          "Could provide a contrasting perspective that challenges the team to justify their approaches."
         ],
         "concerns": [
-          "Low openness and conscientiousness may lead to resistance in adopting new technologies and methodologies, potentially stalling innovation.",
-          "High neuroticism could result in stress and conflict, especially in high-pressure situations or when facing criticism.",
-          "Disinterest in team interactions and presentations may isolate her from the team, affecting collaboration and knowledge sharing."
+          "High neuroticism may lead to stress in fast-paced or changing environments.",
+          "Low openness and agreeableness could hinder collaboration and innovation.",
+          "Disregard for deadlines and project management tools may conflict with the team's conscientiousness."
         ],
         "recommendations": [
-          "Consider a trial period to assess Carol's ability to adapt to team norms and project management tools.",
-          "Pair Carol with a mentor from the team to encourage openness to new technologies and improve her engagement in team activities.",
-          "Provide clear expectations regarding project deadlines and the use of project management tools to align her work style with team standards."
+          "Consider a trial period to assess actual collaboration and adaptability in a controlled setting.",
+          "Pair with a mentor from the team to encourage openness to new technologies and collaboration.",
+          "Provide clear expectations regarding project management and deadlines to align with team standards."
         ],
         "team_dynamics_impact": {
-          "likely_role": "Isolated contributor",
-          "collaboration_style": "Minimal interaction, prefers to work independently",
-          "influence_on_team": "Potential to decrease team cohesion and innovation due to resistance to change and limited collaboration"
+          "likely_role": "Isolated contributor, potentially resistant to team norms and collaboration.",
+          "collaboration_style": "Minimalist, preferring to work independently with little interaction.",
+          "influence_on_team": "Could introduce friction due to differing work styles and resistance to team culture."
         },
         "development_opportunities": [
-          "Encourage participation in team meetings and presentations to improve communication skills and team integration.",
-          "Offer training sessions on new technologies to spark interest and reduce resistance to learning."
+          "Encourage participation in team meetings and presentations to build comfort with collaboration.",
+          "Offer training on new technologies in a supportive, non-judgmental environment to foster openness."
         ],
         "risk_factors": [
-          "Risk of project delays due to disregard for deadlines and project management practices.",
-          "Potential for increased team tension if her resistance to change and collaboration is not addressed."
+          "Potential for decreased team morale if her resistance to collaboration and change is not addressed.",
+          "Risk of project delays or conflicts over deadlines and project management practices."
         ]
       },
       "overall_recommendation": {
         "status": "NOT RECOMMENDED",
-        "combined_score": 0.37,
+        "combined_score": 0.3,
         "reasoning": "Significant compatibility concerns across multiple dimensions.",
         "confidence_level": 0.85
       }
@@ -373,78 +264,44 @@
           "neuroticism": 0.4
         }
       },
-      "mathematical_analysis": {
-        "overall_compatibility": 0.842,
-        "team_harmony_indicator": 0.999,
-        "compatibility_range": {
-          "min": 0.794,
-          "max": 0.878
-        },
-        "individual_member_scores": [
-          {
-            "member": "Emma Dupont",
-            "compatibility": 0.844
-          },
-          {
-            "member": "Lucas Moreau",
-            "compatibility": 0.83
-          },
-          {
-            "member": "Sophie Martin",
-            "compatibility": 0.878
-          },
-          {
-            "member": "Antoine Lefevre",
-            "compatibility": 0.836
-          },
-          {
-            "member": "Camille Rousseau",
-            "compatibility": 0.794
-          },
-          {
-            "member": "Thomas Bernard",
-            "compatibility": 0.868
-          }
-        ]
-      },
       "ai_analysis": {
-        "compatibility_score": 0.85,
-        "confidence_level": 0.9,
-        "summary": "Alice Smith demonstrates a strong potential fit with the existing software engineering team, with her conscientiousness and agreeableness aligning well with the team's dynamics. Her introverted nature and methodical approach to learning and collaboration suggest she will integrate smoothly, though her lower openness may require attention.",
+        "compatibility_score": 0.75,
+        "confidence_level": 0.85,
+        "summary": "Alice Smith presents a solid fit for the team with her conscientiousness and agreeableness, aligning well with the team's high standards and collaborative culture. Her introverted nature and preference for stability may require some adjustments to fully integrate into the team's dynamic and innovative environment.",
         "strengths": [
-          "High conscientiousness aligns with the team's emphasis on organization and reliability.",
-          "Agreeableness score suggests she will collaborate effectively and maintain team harmony.",
-          "Her methodical approach to learning and project management complements the team's structured environment."
+          "High conscientiousness aligns with the team's emphasis on reliability and quality.",
+          "Moderate agreeableness suggests she will collaborate effectively without dominating discussions.",
+          "Her methodical approach to learning and project management complements the team's structured workflow."
         ],
         "concerns": [
-          "Lower openness may limit her adaptability to new technologies and innovative solutions.",
-          "Moderate extraversion could affect her visibility in team discussions and presentations.",
-          "Slightly higher neuroticism might require support in high-pressure situations."
+          "Lower extraversion may limit her spontaneous engagement in team discussions and brainstorming sessions.",
+          "Preference for stability over novelty could slow adaptation to new technologies or approaches favored by the team.",
+          "Nervousness with public speaking may affect her ability to present ideas confidently in larger group settings."
         ],
         "recommendations": [
-          "Encourage participation in team brainstorming sessions to foster openness and innovation.",
-          "Provide opportunities for small group presentations to build confidence in public speaking.",
-          "Pair with a mentor to explore new technologies and expand her technical adaptability."
+          "Encourage participation in smaller, more intimate team meetings to build her confidence in group settings.",
+          "Pair her with more extroverted team members like Lucas or Camille for projects to foster greater verbal collaboration.",
+          "Provide structured onboarding for new technologies to ease her transition and leverage her methodical learning style."
         ],
         "team_dynamics_impact": {
-          "likely_role": "Supportive contributor, focusing on backend or full-stack development tasks.",
-          "collaboration_style": "Preferring one-on-one interactions and written communication, but capable of adapting to team meetings when necessary.",
-          "influence_on_team": "Likely to enhance team cohesion through reliable performance and cooperative attitude, with minimal disruption to existing dynamics."
+          "likely_role": "The reliable executor who ensures tasks are completed with high quality and attention to detail.",
+          "collaboration_style": "Prefers written communication and one-on-one discussions, contributing thoughtfully in team settings.",
+          "influence_on_team": "Likely to reinforce the team's culture of diligence and precision, potentially encouraging more introverted members to engage."
         },
         "development_opportunities": [
-          "Expand technical versatility through guided exploration of new programming languages and frameworks.",
-          "Develop public speaking and presentation skills through targeted training and practice opportunities."
+          "Public speaking and presentation skills to enhance her comfort and effectiveness in group settings.",
+          "Exposure to agile and innovative project methodologies to broaden her adaptability to new approaches."
         ],
         "risk_factors": [
-          "Potential resistance to adopting new technologies could slow down innovation in fast-paced projects.",
-          "Limited engagement in large group settings may reduce her visibility and perceived contribution."
+          "Potential isolation if not actively integrated into team communications and social interactions.",
+          "Resistance to rapid changes in project direction or technology stack could create friction in fast-paced environments."
         ]
       },
       "overall_recommendation": {
-        "status": "HIGHLY RECOMMENDED",
-        "combined_score": 0.846,
-        "reasoning": "Strong compatibility across multiple assessment dimensions.",
-        "confidence_level": 0.9
+        "status": "RECOMMENDED",
+        "combined_score": 0.75,
+        "reasoning": "Good compatibility with positive indicators for team fit.",
+        "confidence_level": 0.85
       }
     },
     {
@@ -461,77 +318,43 @@
           "neuroticism": 0.1
         }
       },
-      "mathematical_analysis": {
-        "overall_compatibility": 0.832,
-        "team_harmony_indicator": 0.998,
-        "compatibility_range": {
-          "min": 0.774,
-          "max": 0.892
-        },
-        "individual_member_scores": [
-          {
-            "member": "Emma Dupont",
-            "compatibility": 0.84
-          },
-          {
-            "member": "Lucas Moreau",
-            "compatibility": 0.814
-          },
-          {
-            "member": "Sophie Martin",
-            "compatibility": 0.774
-          },
-          {
-            "member": "Antoine Lefevre",
-            "compatibility": 0.853
-          },
-          {
-            "member": "Camille Rousseau",
-            "compatibility": 0.892
-          },
-          {
-            "member": "Thomas Bernard",
-            "compatibility": 0.82
-          }
-        ]
-      },
       "ai_analysis": {
-        "compatibility_score": 0.89,
-        "confidence_level": 0.95,
-        "summary": "Mohammed exhibits a strong personality fit with the existing team, with high openness and conscientiousness that align well with the team's values. His collaborative and methodical approach to work, combined with his enthusiasm for new technologies, positions him as a valuable addition to the team.",
+        "compatibility_score": 0.95,
+        "confidence_level": 0.9,
+        "summary": "Mohammed exhibits a high level of compatibility with the current team, showcasing exceptional openness, conscientiousness, and agreeableness. His proactive approach to learning and collaboration, combined with his methodical project management skills, positions him as a valuable asset to the team. His high extraversion and agreeableness suggest he will integrate well and enhance team cohesion.",
         "strengths": [
-          "High openness and conscientiousness align with the team's emphasis on innovation and reliability.",
-          "Strong collaboration skills and enthusiasm for teamwork enhance team cohesion.",
-          "Methodical project planning and communication skills contribute to efficient team workflows."
+          "High openness and conscientiousness align well with the team's innovative and detail-oriented culture.",
+          "Strong extraversion and agreeableness facilitate effective communication and collaboration within the team.",
+          "Proactive learning attitude and leadership in adopting new technologies mirror the team's forward-thinking dynamics."
         ],
         "concerns": [
-          "High extraversion may require adjustment in a team with varying levels of extraversion.",
-          "The candidate's drive for innovation may need to be balanced with the team's current project priorities."
+          "Potential for overcommitment due to high conscientiousness and extraversion, leading to burnout.",
+          "May dominate discussions or decision-making processes, given his high extraversion and leadership tendencies."
         ],
         "recommendations": [
-          "Facilitate introductory meetings with team members to foster early rapport and understanding of team dynamics.",
-          "Assign a mentor from the team to help Mohammed navigate the team's culture and project priorities.",
-          "Encourage Mohammed to share his knowledge and enthusiasm for new technologies in structured team learning sessions."
+          "Encourage Mohammed to delegate tasks and share leadership responsibilities to prevent burnout and promote team inclusivity.",
+          "Monitor team dynamics to ensure Mohammed's high energy and initiative do not inadvertently overshadow quieter team members.",
+          "Leverage Mohammed's enthusiasm for new technologies by assigning him to lead innovation-focused projects or initiatives."
         ],
         "team_dynamics_impact": {
-          "likely_role": "Innovator and collaborator, driving the adoption of new technologies and fostering team cohesion.",
-          "collaboration_style": "Engaging and communicative, with a focus on consensus-building and knowledge sharing.",
-          "influence_on_team": "Positive, likely to energize the team around new ideas and improve communication practices."
+          "likely_role": "Innovation leader and collaborative team player",
+          "collaboration_style": "Engaging and inclusive, with a strong emphasis on communication and consensus-building.",
+          "influence_on_team": "Positive, likely to inspire and motivate the team towards innovation and excellence."
         },
         "development_opportunities": [
-          "Opportunity to lead a small, innovative project to channel his enthusiasm for new technologies.",
-          "Mentoring junior team members to leverage his communication and collaboration strengths."
+          "Opportunity to mentor junior team members, leveraging his enthusiasm for teaching and collaboration.",
+          "Potential to further develop conflict resolution skills to complement his high agreeableness and ensure balanced team dynamics."
         ],
         "risk_factors": [
-          "Potential for over-enthusiasm to disrupt existing workflows if not properly channeled.",
-          "Need to monitor and manage expectations around the pace of innovation within the team's current projects."
+          "Risk of burnout from overcommitment to projects and initiatives.",
+          "Potential for reduced team diversity in thought if his strong personality dominates decision-making processes."
         ]
       },
       "overall_recommendation": {
         "status": "HIGHLY RECOMMENDED",
-        "combined_score": 0.861,
+        "combined_score": 0.95,
         "reasoning": "Strong compatibility across multiple assessment dimensions.",
-        "confidence_level": 0.95
+        "confidence_level": 0.9
       }
     },
     {
@@ -548,103 +371,68 @@
           "neuroticism": 0.1
         }
       },
-      "mathematical_analysis": {
-        "overall_compatibility": 0.832,
-        "team_harmony_indicator": 0.998,
-        "compatibility_range": {
-          "min": 0.774,
-          "max": 0.892
-        },
-        "individual_member_scores": [
-          {
-            "member": "Emma Dupont",
-            "compatibility": 0.84
-          },
-          {
-            "member": "Lucas Moreau",
-            "compatibility": 0.814
-          },
-          {
-            "member": "Sophie Martin",
-            "compatibility": 0.774
-          },
-          {
-            "member": "Antoine Lefevre",
-            "compatibility": 0.853
-          },
-          {
-            "member": "Camille Rousseau",
-            "compatibility": 0.892
-          },
-          {
-            "member": "Thomas Bernard",
-            "compatibility": 0.82
-          }
-        ]
-      },
       "ai_analysis": {
-        "compatibility_score": 0.89,
-        "confidence_level": 0.95,
-        "summary": "Amine Marzouki exhibits a strong personality fit with the existing team, with high scores in openness, conscientiousness, and agreeableness that complement the team's dynamics. His proactive approach to change and systematic project planning align well with the team's values and work style.",
+        "compatibility_score": 0.95,
+        "confidence_level": 0.9,
+        "summary": "Amine Marzouki exhibits exceptional compatibility with the current team, showcasing a blend of high openness, conscientiousness, and agreeableness that aligns well with the team's dynamics. His proactive approach to change, systematic project planning, and outstanding communication skills position him as a valuable asset for fostering innovation and cohesion within the team.",
         "strengths": [
-          "High openness and conscientiousness scores align with the team's innovative and detail-oriented culture.",
-          "Strong agreeableness and extraversion suggest excellent collaboration potential with all team members.",
-          "Proven ability to lead and adapt to change, enhancing the team's resilience and adaptability."
+          "High adaptability and leadership in embracing and leading technological changes.",
+          "Exceptional organizational and project management skills, ensuring timely and quality deliverables.",
+          "Strong communication abilities, capable of bridging technical and non-technical gaps effectively."
         ],
         "concerns": [
-          "Potential for over-dominance in discussions given his high extraversion and leadership tendencies.",
-          "Need to ensure his high conscientiousness does not lead to micromanagement tendencies.",
-          "Balancing his enthusiasm for change with the team's current stability and workflow."
+          "Potential for setting overly high standards that may pressure less conscientious team members.",
+          "High extraversion and openness might occasionally overshadow quieter team members in discussions."
         ],
         "recommendations": [
-          "Facilitate initial team-building activities to integrate Amine smoothly and establish mutual understanding.",
-          "Monitor team dynamics closely in the first few months to ensure his leadership style is empowering rather than overpowering.",
-          "Leverage his skills in knowledge-sharing and documentation to enhance team learning and onboarding processes."
+          "Encourage Amine to mentor team members in project management and communication skills to elevate overall team performance.",
+          "Monitor team dynamics to ensure all voices are heard, leveraging Amine's energy to facilitate inclusive discussions.",
+          "Provide opportunities for Amine to lead innovation initiatives, aligning with his strengths in embracing change."
         ],
         "team_dynamics_impact": {
-          "likely_role": "Innovator and facilitator, likely to take on leadership in projects requiring adaptation and innovation.",
-          "collaboration_style": "Engaging and inclusive, with a strong emphasis on knowledge-sharing and team development.",
-          "influence_on_team": "Positive, likely to inspire and motivate the team towards higher efficiency and innovation, though may require adjustment to his high energy levels."
+          "likely_role": "Innovation leader and project management mentor.",
+          "collaboration_style": "Engaging and inclusive, with a focus on knowledge sharing and team development.",
+          "influence_on_team": "Expected to significantly enhance team cohesion, innovation, and efficiency through his leadership and communication skills."
         },
         "development_opportunities": [
-          "Opportunity to mentor less experienced team members in project management and technical adaptation.",
-          "Potential to lead cross-functional projects, enhancing his leadership and strategic planning skills."
+          "Further develop conflict resolution skills to navigate potential disagreements constructively.",
+          "Enhance ability to tailor communication styles to individual team members' preferences for even more effective collaboration."
         ],
         "risk_factors": [
-          "Risk of burnout due to his high engagement and tendency to take on multiple responsibilities.",
-          "Potential for conflict if his approach to change and innovation is not aligned with all team members' comfort levels."
+          "Risk of burnout due to high personal standards and workload.",
+          "Potential for creating unintentional pressure on team members to match his high productivity and innovation pace."
         ]
       },
       "overall_recommendation": {
         "status": "HIGHLY RECOMMENDED",
-        "combined_score": 0.861,
+        "combined_score": 0.95,
         "reasoning": "Strong compatibility across multiple assessment dimensions.",
-        "confidence_level": 0.95
+        "confidence_level": 0.9
       }
     }
   ],
   "team_insights": {
     "candidate_pool_summary": {
-      "average_compatibility": 0.688,
-      "best_compatibility": 0.842,
-      "compatibility_range": 0.452,
+      "average_compatibility": 0.667,
+      "best_compatibility": 0.95,
+      "compatibility_range": 0.65,
       "candidates_above_threshold": 4
     },
     "top_candidates": [
       {
-        "name": "Bob Johnson",
-        "compatibility": 0.842,
-        "recommendation": "HIGHLY RECOMMENDED"
-      },
-      {
-        "name": "Alice Smith",
-        "compatibility": 0.842,
-        "recommendation": "HIGHLY RECOMMENDED"
-      },
-      {
         "name": "Mohammed",
-        "compatibility": 0.832,
+        "compatibility": 0.95,
         "recommendation": "HIGHLY RECOMMENDED"
+      },
+      {
+        "name": "Amine Marzouki",
+        "compatibility": 0.95,
+        "recommendation": "HIGHLY RECOMMENDED"
+      },
+      {
+        "name": "Bob Johnson",
+        "compatibility": 0.75,
+        "recommendation": "RECOMMENDED"
       }
     ]
   }
