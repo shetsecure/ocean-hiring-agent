@@ -18,11 +18,13 @@ from datetime import datetime
 # Import our existing classes
 from interview_manager import InterviewManager
 from compatibility_analyzer import CompatibilityAnalyzer
+from ai_assistant import AIAssistant, sync_candidates_auto
 
 # Import models from separate file
 from models import (
     CreateInterviewRequest, InterviewResponse, TranscriptResponse,
-    CompatibilityAnalysisRequest, PersonalityExtractionRequest, HealthResponse, StatusResponse
+    CompatibilityAnalysisRequest, PersonalityExtractionRequest, HealthResponse, StatusResponse,
+    CandidateQueryRequest, CandidateQueryResponse, CandidateResult, SyncRequest, SyncResponse, CandidateStatsResponse
 )
 
 # Configure logging
@@ -32,15 +34,23 @@ logger = logging.getLogger(__name__)
 # Global instances
 interview_manager = None
 compatibility_analyzer = None
+ai_assistant = None
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Handle startup and shutdown events."""
     # Startup
-    global interview_manager, compatibility_analyzer
+    global interview_manager, compatibility_analyzer, ai_assistant
     try:
         interview_manager = InterviewManager()
         compatibility_analyzer = CompatibilityAnalyzer()
+        # AI assistant initialization is optional (requires Weaviate credentials)
+        try:
+            ai_assistant = AIAssistant()
+            logger.info("✅ AI Assistant initialized successfully")
+        except Exception as ai_e:
+            logger.warning(f"⚠️ AI Assistant initialization failed: {ai_e}")
+            ai_assistant = None
         logger.info("✅ API services initialized successfully")
     except Exception as e:
         logger.error(f"❌ Failed to initialize services: {e}")
@@ -48,7 +58,9 @@ async def lifespan(app: FastAPI):
     
     yield
     
-    # Shutdown (if needed)
+    # Shutdown
+    if ai_assistant:
+        ai_assistant.close_connection()
     logger.info("🔄 API shutting down")
 
 # Initialize FastAPI app with lifespan
@@ -91,6 +103,7 @@ async def get_status():
         api_version="1.0.0",
         interview_manager_available=interview_manager is not None,
         compatibility_analyzer_available=compatibility_analyzer is not None,
+        ai_assistant_available=ai_assistant is not None,
         rate_limit_info=rate_limit_info
     )
 
@@ -228,6 +241,19 @@ async def analyze_compatibility(request: CompatibilityAnalysisRequest):
             candidates_data_list=candidates_data_list
         )
         
+        # Auto-sync candidates to Weaviate if AI assistant is available and auto-sync is enabled
+        if ai_assistant and ai_assistant.auto_sync:
+            try:
+                logger.info("🔄 Auto-syncing candidates to Weaviate...")
+                sync_success = ai_assistant.sync_candidates_from_file()
+                if sync_success:
+                    logger.info("✅ Auto-sync completed successfully")
+                else:
+                    logger.warning("⚠️ Auto-sync failed - check logs")
+            except Exception as sync_e:
+                logger.error(f"❌ Auto-sync error: {sync_e}")
+                # Don't fail the analysis if sync fails
+        
         return results
                     
     except Exception as e:
@@ -256,6 +282,87 @@ async def extract_personality(request: PersonalityExtractionRequest):
     except Exception as e:
         logger.error(f"Error extracting personality traits: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to extract personality traits: {str(e)}")
+
+# AI Assistant Endpoints
+
+@app.post("/candidates/sync", response_model=SyncResponse)
+async def sync_candidates(request: SyncRequest = None):
+    """Sync candidates from compatibility_scores.json to Weaviate."""
+    if not ai_assistant:
+        raise HTTPException(status_code=503, detail="AI Assistant not available - check Weaviate configuration")
+    
+    try:
+        # Determine file path
+        file_path = request.file_path if request and request.file_path else None
+        
+        # Sync candidates
+        success = ai_assistant.sync_candidates_from_file(file_path)
+        
+        if success:
+            # Get stats to return count
+            stats = ai_assistant.get_candidate_stats()
+            candidates_synced = stats.get("total_candidates", 0)
+            
+            return SyncResponse(
+                success=True,
+                message=f"Successfully synced {candidates_synced} candidates to Weaviate",
+                candidates_synced=candidates_synced,
+                timestamp=datetime.now().isoformat()
+            )
+        else:
+            return SyncResponse(
+                success=False,
+                message="Failed to sync candidates - check logs for details",
+                timestamp=datetime.now().isoformat()
+            )
+            
+    except Exception as e:
+        logger.error(f"Error syncing candidates: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to sync candidates: {str(e)}")
+
+@app.post("/candidates/query", response_model=CandidateQueryResponse)
+async def query_candidates(request: CandidateQueryRequest):
+    """Query candidates using natural language."""
+    if not ai_assistant:
+        raise HTTPException(status_code=503, detail="AI Assistant not available - check Weaviate configuration")
+    
+    try:
+        result = ai_assistant.query_candidates(request.query, request.limit)
+        
+        # Convert to response model format
+        candidates = []
+        for candidate in result.get("candidates", []):
+            candidates.append(CandidateResult(**candidate))
+        
+        return CandidateQueryResponse(
+            query=result["query"],
+            results_count=result["results_count"],
+            candidates=candidates,
+            timestamp=result["timestamp"],
+            error=result.get("error")
+        )
+        
+    except Exception as e:
+        logger.error(f"Error querying candidates: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to query candidates: {str(e)}")
+
+@app.get("/candidates/stats", response_model=CandidateStatsResponse)
+async def get_candidate_stats():
+    """Get statistics about candidates in the database."""
+    if not ai_assistant:
+        raise HTTPException(status_code=503, detail="AI Assistant not available - check Weaviate configuration")
+    
+    try:
+        stats = ai_assistant.get_candidate_stats()
+        
+        if "error" in stats:
+            raise HTTPException(status_code=500, detail=stats["error"])
+        
+        return CandidateStatsResponse(**stats)
+        
+    except Exception as e:
+        logger.error(f"Error getting candidate stats: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get candidate stats: {str(e)}")
 
 # Error handlers
 

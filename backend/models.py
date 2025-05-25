@@ -84,4 +84,53 @@ class StatusResponse(BaseModel):
     api_version: str
     interview_manager_available: bool
     compatibility_analyzer_available: bool
-    rate_limit_info: Dict[str, Any] 
+    ai_assistant_available: bool
+    rate_limit_info: Dict[str, Any]
+
+# AI Assistant Models
+
+class CandidateQueryRequest(BaseModel):
+    query: str = Field(..., description="Natural language query about candidates")
+    limit: Optional[int] = Field(5, description="Maximum number of results to return")
+
+class PersonalityTraits(BaseModel):
+    openness: Optional[float] = None
+    conscientiousness: Optional[float] = None
+    extraversion: Optional[float] = None
+    agreeableness: Optional[float] = None
+    neuroticism: Optional[float] = None
+
+class CandidateResult(BaseModel):
+    name: str
+    position: str
+    candidate_id: str
+    compatibility_score: float
+    recommendation: str
+    summary: str
+    strengths: List[str]
+    concerns: List[str]
+    personality_traits: PersonalityTraits
+    relevance_score: Optional[float] = None
+
+class CandidateQueryResponse(BaseModel):
+    query: str
+    results_count: int
+    candidates: List[CandidateResult]
+    timestamp: str
+    error: Optional[str] = None
+
+class SyncRequest(BaseModel):
+    file_path: Optional[str] = Field(None, description="Path to compatibility scores file (optional)")
+
+class SyncResponse(BaseModel):
+    success: bool
+    message: str
+    candidates_synced: Optional[int] = None
+    timestamp: str
+
+class CandidateStatsResponse(BaseModel):
+    total_candidates: int
+    recommendations_distribution: Dict[str, Any]
+    collection_name: str
+    timestamp: str
+    error: Optional[str] = None 
