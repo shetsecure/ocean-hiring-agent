@@ -9,6 +9,9 @@ class TeamCompatibilityDashboard {
 
     async init() {
         try {
+            // Check for analysis parameters from interview page
+            this.checkForInterviewAnalysis();
+            
             await this.loadData();
             this.hideLoading();
             this.populateOverview();
@@ -20,6 +23,138 @@ class TeamCompatibilityDashboard {
             console.error('Dashboard initialization failed:', error);
             this.showError('Failed to load dashboard data');
         }
+    }
+
+    checkForInterviewAnalysis() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const analyzeInterviews = urlParams.get('analyze_interviews');
+        
+        if (analyzeInterviews) {
+            try {
+                const candidatesData = JSON.parse(analyzeInterviews);
+                this.handleInterviewAnalysis(candidatesData);
+            } catch (error) {
+                console.error('Error parsing interview analysis data:', error);
+            }
+        }
+    }
+
+    async handleInterviewAnalysis(candidatesData) {
+        // Show notification for interview analysis
+        this.showAnalysisNotification(candidatesData);
+        
+        // Here you could trigger actual analysis
+        // For now, we'll just highlight that these candidates were selected for analysis
+        console.log('Interview candidates selected for analysis:', candidatesData);
+        
+        // Store the interview candidates for highlighting
+        this.interviewCandidates = candidatesData;
+        
+        // Clean URL after processing
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    showAnalysisNotification(candidatesData) {
+        const notification = document.createElement('div');
+        notification.className = 'analysis-notification';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <div class="notification-header">
+                    <i class="fas fa-brain"></i>
+                    <h4>Interview Analysis</h4>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <p>Analyzing ${candidatesData.length} candidate${candidatesData.length > 1 ? 's' : ''} from interview data:</p>
+                <ul class="candidates-list">
+                    ${candidatesData.map(c => `<li><strong>${c.candidate_name}</strong> - ${c.role}</li>`).join('')}
+                </ul>
+                <div class="notification-actions">
+                    <button class="btn btn-primary" onclick="this.parentElement.parentElement.parentElement.remove()">
+                        <i class="fas fa-check"></i> Continue Analysis
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Add notification styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .analysis-notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+                border-left: 4px solid var(--primary-color);
+                max-width: 400px;
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+            }
+            
+            .notification-content {
+                padding: 1.5rem;
+            }
+            
+            .notification-header {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .notification-header h4 {
+                margin: 0;
+                flex: 1;
+                color: var(--primary-color);
+            }
+            
+            .notification-close {
+                background: none;
+                border: none;
+                color: var(--text-secondary);
+                cursor: pointer;
+                padding: 0.25rem;
+                border-radius: 4px;
+            }
+            
+            .notification-close:hover {
+                background: var(--secondary-color);
+            }
+            
+            .candidates-list {
+                margin: 0.75rem 0;
+                padding-left: 1.25rem;
+            }
+            
+            .candidates-list li {
+                margin-bottom: 0.25rem;
+                font-size: 0.9rem;
+            }
+            
+            .notification-actions {
+                margin-top: 1rem;
+                display: flex;
+                justify-content: flex-end;
+            }
+            
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        
+        document.head.appendChild(style);
+        document.body.appendChild(notification);
+        
+        // Auto-remove after 10 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 10000);
     }
 
     async loadData() {

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/interview.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1><i class="fas fa-video"></i> AI Interview Portal</h1>
+                    <p class="subtitle">Conduct AI-Powered Candidate Interviews</p>
+                </div>
+                <div class="header-right">
+                    <a href="/" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="/dashboard" class="nav-link">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Interview Setup Section -->
+            <section class="interview-setup-section" id="interview-setup">
+                <div class="section-header">
+                    <h2><i class="fas fa-user-plus"></i> Create New Interview</h2>
+                    <p class="section-description">Set up an AI-powered interview session for a candidate</p>
+                </div>
+                
+                <div class="interview-form-container">
+                    <form id="interview-form" class="interview-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="candidate-name">
+                                    <i class="fas fa-user"></i> Candidate Name
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="candidate-name" 
+                                    name="candidate_name" 
+                                    required 
+                                    placeholder="Enter candidate's full name"
+                                    class="form-input"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="role">
+                                    <i class="fas fa-briefcase"></i> Role
+                                </label>
+                                <select id="role" name="role" required class="form-select">
+                                    <option value="">Select a role</option>
+                                    <option value="Software Engineer">Software Engineer</option>
+                                    <option value="Senior Software Engineer">Senior Software Engineer</option>
+                                    <option value="Frontend Developer">Frontend Developer</option>
+                                    <option value="Backend Developer">Backend Developer</option>
+                                    <option value="Full Stack Developer">Full Stack Developer</option>
+                                    <option value="DevOps Engineer">DevOps Engineer</option>
+                                    <option value="QA Engineer">QA Engineer</option>
+                                    <option value="UI/UX Designer">UI/UX Designer</option>
+                                    <option value="Product Manager">Product Manager</option>
+                                    <option value="Data Scientist">Data Scientist</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="candidate-email">
+                                    <i class="fas fa-envelope"></i> Email Address
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="candidate-email" 
+                                    name="candidate_email" 
+                                    placeholder="candidate@example.com"
+                                    class="form-input"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="create-interview-btn">
+                                <i class="fas fa-video"></i> Create Interview
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Interview Session Section -->
+            <section class="interview-session-section" id="interview-session" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-video"></i> Live Interview Session</h2>
+                    <div class="interview-info">
+                        <span class="candidate-info" id="current-candidate-info"></span>
+                        <span class="interview-status" id="interview-status">
+                            <i class="fas fa-circle status-indicator"></i> Ready
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="interview-container">
+                    <div class="interview-frame-container">
+                        <iframe 
+                            id="interview-iframe"
+                            width="100%" 
+                            height="600px" 
+                            frameborder="0" 
+                            allowfullscreen
+                            allow="camera; microphone; fullscreen"
+                            style="border: none; max-width: 100%; border-radius: 8px;"
+                        ></iframe>
+                    </div>
+                    
+                    <div class="interview-controls">
+                        <button class="btn btn-secondary" id="refresh-interview-btn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn btn-success" id="get-transcript-btn">
+                            <i class="fas fa-file-alt"></i> Get Transcript
+                        </button>
+                        <button class="btn btn-primary" id="new-interview-btn">
+                            <i class="fas fa-plus"></i> New Interview
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interview History Section -->
+            <section class="interview-history-section" id="interview-history">
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> Interview History</h2>
+                    <div class="history-actions">
+                        <button class="btn btn-secondary" id="refresh-history-btn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn btn-primary" id="analyze-selected-btn" disabled>
+                            <i class="fas fa-brain"></i> Analyze Selected (<span id="selected-count">0</span>)
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="history-container">
+                    <div class="history-controls">
+                        <div class="bulk-actions">
+                            <button class="btn btn-outline" id="select-all-btn">
+                                <i class="fas fa-check-square"></i> Select All
+                            </button>
+                            <button class="btn btn-outline" id="clear-selection-btn">
+                                <i class="fas fa-square"></i> Clear All
+                            </button>
+                        </div>
+                        <div class="filter-options">
+                            <select id="status-filter" class="form-select">
+                                <option value="all">All Statuses</option>
+                                <option value="completed">Completed</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                            <input type="text" id="search-candidates" class="form-input" placeholder="Search candidates...">
+                        </div>
+                    </div>
+                    
+                    <div class="history-grid" id="history-grid">
+                        <!-- Interview history will be loaded here -->
+                    </div>
+                    
+                    <div class="history-empty" id="history-empty" style="display: none;">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>No Interviews Found</h3>
+                        <p>Start by creating your first interview above.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transcript Section -->
+            <section class="transcript-section" id="transcript-section" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-file-text"></i> Interview Transcript</h2>
+                    <div class="transcript-actions">
+                        <button class="btn btn-primary" id="download-transcript-btn">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button class="btn btn-secondary" id="analyze-transcript-btn">
+                            <i class="fas fa-brain"></i> Analyze
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="transcript-container">
+                    <div class="transcript-content" id="transcript-content">
+                        <!-- Transcript will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-cog fa-spin"></i>
+            <p id="loading-message">Creating interview...</p>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal-overlay" id="error-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+                <button class="modal-close" id="error-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="error-message"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+</body>
+</html> 

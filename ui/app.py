@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import json
 import os
 import requests
@@ -7,6 +7,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+# Configuration
+API_BASE_URL = os.getenv('API_BASE_URL', 'http://localhost:8000')
 
 def load_dashboard_data_api():
     """Load dashboard data by calling the API endpoint"""
@@ -50,7 +52,7 @@ def load_dashboard_data_api():
         }
         
         # Make POST request to the API
-        api_url = "http://localhost:8000/analysis/compatibility"
+        api_url = f"{API_BASE_URL}/analysis/compatibility"
         headers = {"Content-Type": "application/json"}
         
         response = requests.post(api_url, json=payload, headers=headers, timeout=300)
@@ -114,8 +116,13 @@ def health_check():
     }), 200
 
 @app.route('/')
+def home():
+    """Home page - main landing page"""
+    return render_template('home.html')
+
+@app.route('/dashboard')
 def dashboard():
-    """Main dashboard page"""
+    """Team compatibility dashboard page"""
     return render_template('dashboard.html')
 
 
@@ -170,6 +177,145 @@ def debug_compatibility():
     }
     
     return jsonify(debug_info)
+
+@app.route('/interview')
+def interview_page():
+    """Interview page for creating and conducting AI interviews"""
+    return render_template('interview.html')
+
+@app.route('/api/create-interview', methods=['POST'])
+def create_interview_proxy():
+    """Proxy endpoint to create interview via API"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        if not data.get('candidate_name') or not data.get('role'):
+            return jsonify({'error': 'Missing required fields'}), 400
+        
+        # Make request to actual API
+        api_url = f"{API_BASE_URL}/interviews"
+        headers = {"Content-Type": "application/json"}
+        
+        response = requests.post(api_url, json=data, headers=headers, timeout=30)
+        
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            error_data = response.json() if response.headers.get('content-type') == 'application/json' else {'detail': response.text}
+            return jsonify(error_data), response.status_code
+            
+    except requests.exceptions.ConnectionError:
+        return jsonify({'error': 'API server is not accessible'}), 503
+    except requests.exceptions.Timeout:
+        return jsonify({'error': 'Request timeout'}), 504
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/interview-history')
+def get_interview_history():
+    """Get interview history - for now returns sample data"""
+    try:
+        # For now, return sample data since we don't have a real interview storage system
+        # In a real implementation, this would query a database or API
+        sample_interviews = [
+            {
+                'agent_id': 'agent_001',
+                'candidate_name': 'John Smith',
+                'role': 'Software Engineer',
+                'candidate_email': 'john.smith@email.com',
+                'status': 'completed',
+                'created_at': '2024-01-15T10:30:00Z',
+                'duration': '25 minutes',
+                'has_transcript': True,
+                'interview_link': 'https://agent.ai-interviewer.com/agent_001'
+            },
+            {
+                'agent_id': 'agent_002',
+                'candidate_name': 'Sarah Johnson',
+                'role': 'Frontend Developer',
+                'candidate_email': 'sarah.johnson@email.com',
+                'status': 'completed',
+                'created_at': '2024-01-14T14:15:00Z',
+                'duration': '30 minutes',
+                'has_transcript': True,
+                'interview_link': 'https://agent.ai-interviewer.com/agent_002'
+            },
+            {
+                'agent_id': 'agent_003',
+                'candidate_name': 'Mike Davis',
+                'role': 'Backend Developer',
+                'candidate_email': 'mike.davis@email.com',
+                'status': 'in-progress',
+                'created_at': '2024-01-16T09:00:00Z',
+                'duration': 'In progress',
+                'has_transcript': False,
+                'interview_link': 'https://agent.ai-interviewer.com/agent_003'
+            },
+            {
+                'agent_id': 'agent_004',
+                'candidate_name': 'Emily Chen',
+                'role': 'Full Stack Developer',
+                'candidate_email': 'emily.chen@email.com',
+                'status': 'completed',
+                'created_at': '2024-01-13T16:45:00Z',
+                'duration': '28 minutes',
+                'has_transcript': True,
+                'interview_link': 'https://agent.ai-interviewer.com/agent_004'
+            },
+            {
+                'agent_id': 'agent_005',
+                'candidate_name': 'David Wilson',
+                'role': 'DevOps Engineer',
+                'candidate_email': 'david.wilson@email.com',
+                'status': 'failed',
+                'created_at': '2024-01-12T11:20:00Z',
+                'duration': '10 minutes',
+                'has_transcript': False,
+                'interview_link': 'https://agent.ai-interviewer.com/agent_005'
+            }
+        ]
+        
+        return jsonify({
+            'success': True,
+            'interviews': sample_interviews,
+            'total_count': len(sample_interviews)
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/interview-transcript/<agent_id>')
+def get_interview_transcript_proxy(agent_id):
+    """Proxy endpoint to get interview transcript via API"""
+    try:
+        candidate_name = request.args.get('candidate_name')
+        role = request.args.get('role')
+        
+        # Build query parameters
+        params = {}
+        if candidate_name:
+            params['candidate_name'] = candidate_name
+        if role:
+            params['role'] = role
+        
+        # Make request to actual API
+        api_url = f"{API_BASE_URL}/interviews/{agent_id}/transcript"
+        
+        response = requests.get(api_url, params=params, timeout=30)
+        
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            error_data = response.json() if response.headers.get('content-type') == 'application/json' else {'detail': response.text}
+            return jsonify(error_data), response.status_code
+            
+    except requests.exceptions.ConnectionError:
+        return jsonify({'error': 'API server is not accessible'}), 503
+    except requests.exceptions.Timeout:
+        return jsonify({'error': 'Request timeout'}), 504
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5005) 
