@@ -13,6 +13,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict, Any
 import logging
+from datetime import datetime
 
 # Import our existing classes
 from interview_manager import InterviewManager
@@ -20,7 +21,7 @@ from compatibility_analyzer import CompatibilityAnalyzer
 
 # Import models from separate file
 from models import (
-    CreateInterviewRequest, InterviewResponse, TranscriptResponse, SaveTranscriptRequest,
+    CreateInterviewRequest, InterviewResponse, TranscriptResponse,
     CompatibilityAnalysisRequest, PersonalityExtractionRequest, HealthResponse, StatusResponse
 )
 
@@ -147,9 +148,9 @@ async def list_interviews():
         logger.error(f"Error listing interviews: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to list interviews: {str(e)}")
 
-@app.post("/interviews/{agent_id}/transcript/save")
-async def save_transcript(agent_id: str, request: SaveTranscriptRequest):
-    """Save transcript to file."""
+@app.get("/interviews/{agent_id}/transcript/download")
+async def download_transcript(agent_id: str, filename: str = None):
+    """Download transcript as a file."""
     if not interview_manager:
         raise HTTPException(status_code=503, detail="Interview manager not available")
     
@@ -160,23 +161,36 @@ async def save_transcript(agent_id: str, request: SaveTranscriptRequest):
         if not transcript_data.get("success"):
             raise HTTPException(status_code=404, detail="No transcript found for this agent")
         
-        # Save the transcript
-        filename = interview_manager.save_transcript(
-            transcript_data=transcript_data,
-            filename=request.filename
-        )
+        # Generate the transcript content
+        import json
+        from fastapi.responses import Response
         
-        return {
-            "success": True,
-            "message": "Transcript saved successfully",
-            "filename": filename
-        }
+        # Create filename with timestamp if not provided
+        if not filename:
+            filename = f"transcript_{agent_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        
+        # Ensure filename ends with .json
+        if not filename.endswith('.json'):
+            filename += '.json'
+        
+        # Convert transcript data to JSON string
+        transcript_json = json.dumps(transcript_data, indent=2, ensure_ascii=False)
+        
+        # Return as downloadable file
+        return Response(
+            content=transcript_json,
+            media_type="application/octet-stream",  # Force download instead of display
+            headers={
+                "Content-Disposition": f"attachment; filename=\"{filename}\"",
+                "Content-Length": str(len(transcript_json.encode('utf-8')))
+            }
+        )
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error saving transcript: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to save transcript: {str(e)}")
+        logger.error(f"Error preparing transcript download: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to prepare transcript download: {str(e)}")
 
 # Compatibility Analysis Endpoints
 

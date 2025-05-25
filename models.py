@@ -35,9 +35,6 @@ class TranscriptResponse(BaseModel):
     message_count: Optional[int] = None
     error: Optional[str] = None
 
-class SaveTranscriptRequest(BaseModel):
-    filename: Optional[str] = None
-
 # Team and Candidate Models
 
 class TeamMember(BaseModel):

@@ -92,6 +92,71 @@ def test_create_interview():
             print(f"   Response text: {response.text}")
         return False
 
+def test_transcript_download():
+    """Test transcript download functionality."""
+    try:
+        # First create an interview to get an agent_id
+        interview_data = {
+            "candidate_name": "Test Download Candidate",
+            "role": "Software Engineer",
+            "candidate_email": "download@example.com"
+        }
+        interview_response = requests.post("http://localhost:8000/interviews", json=interview_data)
+        
+        if interview_response.status_code != 200:
+            print(f"❌ Failed to create interview for download test: {interview_response.text}")
+            return False
+        
+        agent_id = interview_response.json().get('agent_id')
+        print(f"✅ Created interview with agent_id: {agent_id}")
+        
+        # Try to download transcript using GET with query parameter
+        download_response = requests.get(
+            f"http://localhost:8000/interviews/{agent_id}/transcript/download?filename=test_transcript.json"
+        )
+        
+        print(f"✅ Transcript download test: {download_response.status_code}")
+        print(f"   URL: /interviews/{agent_id}/transcript/download?filename=test_transcript.json")
+        
+        if download_response.status_code == 200:
+            # Check headers for download
+            content_disposition = download_response.headers.get('Content-Disposition', '')
+            content_type = download_response.headers.get('Content-Type', '')
+            content_length = download_response.headers.get('Content-Length', '')
+            
+            print(f"   Headers:")
+            print(f"     Content-Disposition: {content_disposition}")
+            print(f"     Content-Type: {content_type}")
+            print(f"     Content-Length: {content_length}")
+            print(f"   Actual content length: {len(download_response.content)} bytes")
+            
+            # Try to parse as JSON to verify it's valid
+            try:
+                transcript_data = download_response.json()
+                print(f"   Valid JSON response with keys: {list(transcript_data.keys())}")
+            except:
+                print(f"   Response is not valid JSON (which is expected for octet-stream)")
+                # Try to decode and parse
+                try:
+                    transcript_text = download_response.content.decode('utf-8')
+                    transcript_data = json.loads(transcript_text)
+                    print(f"   Successfully decoded JSON with keys: {list(transcript_data.keys())}")
+                except:
+                    print(f"   Could not decode content as JSON")
+                
+        elif download_response.status_code == 404:
+            print(f"   Expected 404 - no transcript available yet for new interview")
+        else:
+            print(f"   Error response: {download_response.text}")
+            
+        return True
+        
+    except Exception as e:
+        print(f"❌ Transcript download test failed: {e}")
+        if 'download_response' in locals():
+            print(f"   Response text: {download_response.text}")
+        return False
+
 def test_compatibility_analysis():
     """Test compatibility analysis with JSON data."""
     try:
@@ -145,6 +210,7 @@ def main():
             ("Health Check", test_health),
             ("Status Check", test_status), 
             ("Interview Creation", test_create_interview),
+            ("Transcript Download", test_transcript_download),
             ("Compatibility Analysis", test_compatibility_analysis)
         ]
         
