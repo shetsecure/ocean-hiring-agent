@@ -148,6 +148,23 @@ async def list_interviews():
         logger.error(f"Error listing interviews: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to list interviews: {str(e)}")
 
+@app.get("/interviews/saved")
+async def get_saved_interviews():
+    """Get all saved interviews from the tracking file."""
+    if not interview_manager:
+        raise HTTPException(status_code=503, detail="Interview manager not available")
+    
+    try:
+        saved_interviews = interview_manager.get_saved_interviews()
+        return {
+            "saved_interviews": saved_interviews,
+            "count": len(saved_interviews)
+        }
+        
+    except Exception as e:
+        logger.error(f"Error retrieving saved interviews: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve saved interviews: {str(e)}")
+
 @app.get("/interviews/{agent_id}/transcript/download")
 async def download_transcript(agent_id: str, filename: str = None):
     """Download transcript as a file."""

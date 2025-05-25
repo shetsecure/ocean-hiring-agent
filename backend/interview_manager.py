@@ -10,6 +10,7 @@ import json
 import re
 from typing import Optional, Dict, Any, List
 from dotenv import load_dotenv
+from datetime import datetime
 
 
 class InterviewManager:
@@ -38,6 +39,9 @@ class InterviewManager:
         self.language = os.getenv("DEFAULT_LANGUAGE", "en")
         self.base_url = "https://api.bey.dev/v1"
         self.chat_url = "https://bey.chat"
+        
+        # Interview tracking file
+        self.interviews_file = "data/interviews.json"
         
         # Store candidate info for transcript formatting
         self._candidate_info = {}
@@ -83,8 +87,12 @@ class InterviewManager:
             "interview_link": interview_link,
             "candidate_name": candidate_name,
             "role": role,
-            "agent_details": agent
+            "agent_details": agent,
+            "created_at": datetime.now().isoformat()
         }
+        
+        # Save interview to tracking file
+        self._save_interview_to_file(agent_id, result)
         
         print(f"✅ Interview created successfully!")
         print(f"📧 Send this link to {candidate_name}: {interview_link}")
@@ -196,6 +204,48 @@ class InterviewManager:
         except Exception as e:
             print(f"❌ Error listing interviews: {e}")
             return []
+    
+    def get_saved_interviews(self) -> Dict[str, Any]:
+        """
+        Get all saved interviews from the tracking file.
+        
+        Returns:
+            Dictionary with agent_id as keys and interview data as values
+        """
+        return self._load_interviews_from_file()
+    
+    def _save_interview_to_file(self, agent_id: str, interview_data: Dict[str, Any]) -> None:
+        """Save interview data to the JSON tracking file."""
+        try:
+            # Load existing interviews
+            interviews = self._load_interviews_from_file()
+            
+            # Add new interview
+            interviews[agent_id] = interview_data
+            
+            # Ensure data directory exists
+            os.makedirs(os.path.dirname(self.interviews_file), exist_ok=True)
+            
+            # Save back to file
+            with open(self.interviews_file, 'w', encoding='utf-8') as f:
+                json.dump(interviews, f, indent=2, ensure_ascii=False)
+            
+            print(f"💾 Interview saved to tracking file: {self.interviews_file}")
+            
+        except Exception as e:
+            print(f"❌ Error saving interview to file: {e}")
+    
+    def _load_interviews_from_file(self) -> Dict[str, Any]:
+        """Load interviews from the JSON tracking file."""
+        try:
+            if os.path.exists(self.interviews_file):
+                with open(self.interviews_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            else:
+                return {}
+        except Exception as e:
+            print(f"❌ Error loading interviews from file: {e}")
+            return {}
     
     # Private helper methods
     def _create_agent(self, candidate_name: str, role: str, candidate_email: str = "") -> Dict[str, Any]:
