@@ -9,6 +9,9 @@ class TeamCompatibilityDashboard {
 
     async init() {
         try {
+            // Clean up any existing charts first
+            this.cleanupRadarCharts();
+            
             // Check for analysis parameters from interview page
             this.checkForInterviewAnalysis();
             
@@ -458,7 +461,7 @@ class TeamCompatibilityDashboard {
         const container = document.getElementById('candidates-grid');
         if (!container) return;
 
-        // Clean up existing radar charts
+        // Clean up existing radar charts completely
         this.cleanupRadarCharts();
 
         container.innerHTML = this.filteredCandidates.map(candidate => {
@@ -484,34 +487,174 @@ class TeamCompatibilityDashboard {
                     <div class="recommendation-badge ${recommendationClass}">
                         ${this.formatRecommendationLabel(recommendation.status)}
                     </div>
-                    <div class="candidate-content">
-                        <div class="radar-chart-container">
-                            <canvas id="radarChart-${info.id}" class="radar-chart" width="140" height="140"></canvas>
-                        </div>
-                        <div class="candidate-highlights">
-                            <h5>Key Strengths</h5>
-                            <ul class="highlights-list">
-                                ${aiAnalysis.strengths.slice(0, 2).map(strength => 
-                                    `<li>${strength}</li>`
-                                ).join('')}
-                            </ul>
-                        </div>
+                    <div class="candidate-chart-container">
+                        <canvas id="radar-${info.id}" class="radar-chart"></canvas>
+                    </div>
+                    <div class="candidate-highlights">
+                        <h5>Key Strengths</h5>
+                        <ul class="highlights-list">
+                            ${aiAnalysis.strengths.slice(0, 2).map(strength => 
+                                `<li>${strength}</li>`
+                            ).join('')}
+                        </ul>
                     </div>
                 </div>
             `;
         }).join('');
 
-        // Add click handlers for candidate cards and create radar charts
+        // Use setTimeout to ensure DOM is fully updated before creating charts
+        setTimeout(() => {
+            this.filteredCandidates.forEach(candidate => {
+                this.createRadarChart(candidate);
+            });
+        }, 50);
+
+        // Add click handlers for candidate cards
         container.querySelectorAll('.candidate-card').forEach(card => {
             card.addEventListener('click', () => {
                 const candidateId = card.dataset.candidateId;
                 this.showCandidateDetails(candidateId);
             });
         });
+    }
 
-        // Create radar charts for each candidate
-        this.filteredCandidates.forEach(candidate => {
-            this.createRadarChart(candidate);
+    createRadarChart(candidate) {
+        const canvasId = `radar-${candidate.candidate_info.id}`;
+        const ctx = document.getElementById(canvasId);
+        if (!ctx) {
+            console.warn(`Canvas not found for candidate: ${candidate.candidate_info.name}`);
+            return;
+        }
+
+        try {
+            // Check if there's already a chart on this canvas and destroy it
+            const existingChart = Chart.getChart(ctx);
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
+            // Extract personality traits data
+            const traits = candidate.candidate_info.personality_traits;
+            
+            // Define the Big Five traits in order with initials as labels
+            const traitLabels = ['O', 'C', 'E', 'A', 'N']; // Initials for better visibility
+            const traitNames = ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'];
+            
+            // Extract values (convert to 0-100 scale)
+            const traitValues = traitNames.map(trait => (traits[trait] || 0) * 100);
+
+            // Create radar chart
+            const chart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: traitLabels,
+                    datasets: [{
+                        label: 'Big Five Profile',
+                        data: traitValues,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Big Five Profile',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                bottom: 10
+                            }
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    const index = context[0].dataIndex;
+                                    const fullNames = ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'];
+                                    return fullNames[index];
+                                },
+                                label: function(context) {
+                                    return `Score: ${context.parsed.r.toFixed(1)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                stepSize: 25,
+                                font: {
+                                    size: 8
+                                }
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 10,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: '#e0e0e0'
+                            },
+                            angleLines: {
+                                color: '#e0e0e0'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Store chart instance for cleanup
+            if (!this.charts.radar) this.charts.radar = {};
+            this.charts.radar[candidate.candidate_info.id] = chart;
+            
+            console.log(`✅ Created radar chart for ${candidate.candidate_info.name}`);
+            
+        } catch (error) {
+            console.error(`❌ Error creating radar chart for ${candidate.candidate_info.name}:`, error);
+        }
+    }
+
+    cleanupRadarCharts() {
+        // Destroy all existing radar charts
+        if (this.charts.radar) {
+            Object.values(this.charts.radar).forEach(chart => {
+                if (chart && typeof chart.destroy === 'function') {
+                    try {
+                        chart.destroy();
+                    } catch (error) {
+                        console.warn('Error destroying chart:', error);
+                    }
+                }
+            });
+            this.charts.radar = {};
+        }
+        
+        // Also clean up any orphaned charts by finding all radar canvas elements
+        const existingCanvases = document.querySelectorAll('.radar-chart');
+        existingCanvases.forEach(canvas => {
+            const chartInstance = Chart.getChart(canvas);
+            if (chartInstance) {
+                try {
+                    chartInstance.destroy();
+                } catch (error) {
+                    console.warn('Error destroying orphaned chart:', error);
+                }
+            }
         });
     }
 
@@ -532,153 +675,6 @@ class TeamCompatibilityDashboard {
         if (score >= 0.6) return '#3b82f6';
         if (score >= 0.4) return '#f59e0b';
         return '#ef4444';
-    }
-
-    createRadarChart(candidate) {
-        const canvasId = `radarChart-${candidate.candidate_info.id}`;
-        const canvas = document.getElementById(canvasId);
-        
-        if (!canvas) {
-            console.warn(`Canvas not found for candidate: ${candidate.candidate_info.id}`);
-            return;
-        }
-
-        const ctx = canvas.getContext('2d');
-        const personalityTraits = candidate.candidate_info.personality_traits;
-
-        // The Big Five traits in order (using initials for better visibility)
-        const traitLabels = ['O', 'C', 'E', 'A', 'N'];
-        const traitFullNames = ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'];
-        
-        // Extract values and convert to 0-100 scale
-        const values = traitFullNames.map(trait => {
-            const traitKey = trait.toLowerCase();
-            let value = personalityTraits[traitKey];
-            
-            // Try alternative key formats if not found
-            if (value === undefined) {
-                const alternativeKeys = [
-                    traitKey.replace('ness', ''),
-                    traitKey.replace(' ', '_'),
-                    trait.toLowerCase().replace(' ', '_')
-                ];
-                
-                for (const altKey of alternativeKeys) {
-                    if (personalityTraits[altKey] !== undefined) {
-                        value = personalityTraits[altKey];
-                        break;
-                    }
-                }
-            }
-            
-            return value !== undefined ? (value * 100) : 50; // Default to 50 if not found
-        });
-
-        const radarChart = new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: traitLabels,
-                datasets: [{
-                    label: 'Big Five Profile',
-                    data: values,
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(99, 102, 241, 1)',
-                    pointBorderColor: 'rgba(99, 102, 241, 1)',
-                    pointRadius: 3,
-                    pointHoverRadius: 4,
-                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                    borderColor: 'rgba(99, 102, 241, 0.8)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Big Five Profile',
-                        font: {
-                            size: 12,
-                            weight: 'bold'
-                        },
-                        padding: {
-                            bottom: 10
-                        }
-                    },
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const fullName = traitFullNames[context.dataIndex];
-                                return `${fullName}: ${context.parsed.r.toFixed(0)}%`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        min: 0,
-                        max: 100,
-                        ticks: {
-                            stepSize: 20,
-                            font: {
-                                size: 8
-                            },
-                            callback: function(value) {
-                                return value + '%';
-                            }
-                        },
-                        pointLabels: {
-                            font: {
-                                size: 9
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.1)'
-                        },
-                        angleLines: {
-                            color: 'rgba(0, 0, 0, 0.1)'
-                        }
-                    }
-                },
-                elements: {
-                    point: {
-                        borderWidth: 1
-                    }
-                },
-                // Disable animations for better performance
-                animation: {
-                    duration: 0
-                },
-                transitions: {
-                    active: {
-                        animation: {
-                            duration: 0
-                        }
-                    }
-                }
-            }
-        });
-
-        // Store chart reference for cleanup if needed
-        if (!this.radarCharts) {
-            this.radarCharts = {};
-        }
-        this.radarCharts[candidate.candidate_info.id] = radarChart;
-    }
-
-    cleanupRadarCharts() {
-        if (this.radarCharts) {
-            Object.values(this.radarCharts).forEach(chart => {
-                if (chart && typeof chart.destroy === 'function') {
-                    chart.destroy();
-                }
-            });
-            this.radarCharts = {};
-        }
     }
 
     showCandidateDetails(candidateId) {

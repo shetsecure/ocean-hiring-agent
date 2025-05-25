@@ -34,7 +34,7 @@ services:
       - "5005:5005"
     volumes:
       # Mount the data folder from host to container
-      - ./data:/app/data:ro  # Read-only mount since UI only reads data
+      - ./data:/app/data:rw  # Read-write mount since UI may save analysis results
     environment:
       - FLASK_ENV=production
       - FLASK_DEBUG=0

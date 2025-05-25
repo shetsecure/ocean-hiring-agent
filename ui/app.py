@@ -32,7 +32,21 @@ def load_dashboard_data_api():
         with open(team_data_path, 'r', encoding='utf-8') as f:
             team_data = json.load(f)
         
-        # Load all candidate data files - use the same directory as team.json
+        
+        if os.path.exists('data/c_data_for_analyzer/candidates_analysis_latest.json'):
+            with open('data/c_data_for_analyzer/candidates_analysis_latest.json', 'r', encoding='utf-8') as f:
+                chosen_candidates = json.load(f)
+                print(f"Chosen candidates: {chosen_candidates}")
+                
+                # Extract candidate names for easier comparison
+                chosen_candidate_names = [candidate.get('candidate_name') for candidate in chosen_candidates.get('candidates', [])]
+                print(f"Chosen candidate names: {chosen_candidate_names}")
+        else:
+            print("No candidates analysis data found")
+        
+        
+        # Load all candidate data files - use the same directory as team.json for demo
+        # for production, we will use INTERVIEW API CALLS to get the candidates data
         data_dir = os.path.dirname(team_data_path)
         candidates_data = []
         candidate_files_pattern = os.path.join(data_dir, 'candidate_*.json')
@@ -41,8 +55,15 @@ def load_dashboard_data_api():
         for candidate_file in candidate_files:
             with open(candidate_file, 'r', encoding='utf-8') as f:
                 candidate_data = json.load(f)
-                candidates_data.append(candidate_data['candidate'])
-        
+                candidate_name = candidate_data['candidate']['name']
+                print(f"Checking candidate: {candidate_name}")
+                
+                if candidate_name in chosen_candidate_names:
+                    print(f"✅ Found chosen candidate: {candidate_name}")
+                    candidates_data.append(candidate_data['candidate'])
+                else:
+                    print(f"❌ Candidate not chosen: {candidate_name}")
+            
         # Format the request payload according to API requirements
         payload = {
             "team_data": team_data,
@@ -91,7 +112,8 @@ def load_dashboard_data():
             '../data/compatibility_scores.json',  # Local development
             'compatibility_scores.json'  # Current directory
         ]
-        
+
+ 
         for data_path in possible_paths:
             if os.path.exists(data_path):
                 with open(data_path, 'r', encoding='utf-8') as f:
@@ -123,6 +145,52 @@ def home():
 @app.route('/dashboard')
 def dashboard():
     """Team compatibility dashboard page"""
+    # Check for analyze_interviews parameter
+    analyze_interviews_json = request.args.get('analyze_interviews')
+    
+    if analyze_interviews_json:
+        try:
+            # Parse the JSON data
+            candidates_data = json.loads(analyze_interviews_json)
+            
+            # Create the data directory if it doesn't exist
+            data_dir = 'data/c_data_for_analyzer'
+            os.makedirs(data_dir, exist_ok=True)
+            
+            # Generate filename with timestamp
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            filename = f'candidates_analysis_{timestamp}.json'
+            filename_latest = f'candidates_analysis_latest.json'
+            filepath = os.path.join(data_dir, filename)
+            filepath_latest = os.path.join(data_dir, filename_latest)
+            # Save the candidate information to file
+            output_data = {
+                'timestamp': datetime.now().isoformat(),
+                'source': 'interview_analysis',
+                'candidates': candidates_data,
+                'total_candidates': len(candidates_data) if isinstance(candidates_data, list) else 1
+            }
+            
+            with open(filepath, 'w', encoding='utf-8') as f:
+                json.dump(output_data, f, indent=2, ensure_ascii=False)
+            with open(filepath_latest, 'w', encoding='utf-8') as f:
+                json.dump(output_data, f, indent=2, ensure_ascii=False)
+            
+            print(f"✅ Saved candidate data for analysis: {filepath} and {filepath_latest}")
+            
+            if len(candidates_data) != 0:
+                print("Candidates chosen, continuing compatibility analysis")
+                # Rename existing compatibility_scores.json to compatibility_scores.json.old if it exists
+                compatibility_scores_path = os.path.join("data", 'compatibility_scores.json')
+                if os.path.exists(compatibility_scores_path):
+                    old_path = compatibility_scores_path + '.old'
+                    os.replace(compatibility_scores_path, old_path)
+                    
+        except json.JSONDecodeError as e:
+            print(f"❌ Error parsing analyze_interviews JSON: {e}")
+        except Exception as e:
+            print(f"❌ Error saving candidate data: {e}")
+    
     return render_template('dashboard.html')
 
 

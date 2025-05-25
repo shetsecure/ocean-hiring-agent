@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-05-25T11:12:06.256546",
+  "source": "interview_analysis",
+  "candidates": [
+    {
+      "agent_id": "s5e954se6-74f6-425f-fba6-972cb410c79z",
+      "candidate_name": "Carol Davis",
+      "role": "Senior Software Engineer"
+    },
+    {
+      "agent_id": "s5ed54se6-74f6-425f-fba6-972cb410coiu",
+      "candidate_name": "Lynda Dupont",
+      "role": "Senior Software Engineer"
+    },
+    {
+      "agent_id": "95e954e6-74f6-425f-bba6-972cb410c797",
+      "candidate_name": "Elon Musk",
+      "role": "Senior Software Engineer"
+    },
+    {
+      "agent_id": "1777adea-2ec7-426c-a2db-f5b983f4b5cf",
+      "candidate_name": "Hamza KARZAZ",
+      "role": "Senior Software Engineer"
+    },
+    {
+      "agent_id": "8d8dff84-7aeb-4fda-a497-0e941cd5d04e",
+      "candidate_name": "Mohammed ELASRI",
+      "role": "Senior Software Engineer"
+    },
+    {
+      "agent_id": "e46f93a6-79af-48d9-a292-acc648b1d99b",
+      "candidate_name": "Amine Marzouki",
+      "role": "Senior Software Engineer"
+    }
+  ],
+  "total_candidates": 6
+}

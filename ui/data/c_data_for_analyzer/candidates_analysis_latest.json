@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-05-25T11:30:00.000000",
+  "source": "interview_analysis",
+  "candidates": [
+    {
+      "agent_id": "agent_001",
+      "candidate_name": "Alice Smith",
+      "role": "Software Engineer"
+    },
+    {
+      "agent_id": "agent_002",
+      "candidate_name": "Bob Johnson",
+      "role": "Frontend Developer"
+    }
+  ],
+  "total_candidates": 2
+}

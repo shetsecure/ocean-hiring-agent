@@ -1,6 +1,6 @@
 {
   "analysis_metadata": {
-    "timestamp": "2025-05-25T00:52:54.955432",
+    "timestamp": "2025-05-25T11:12:12.800600",
     "team_size": 6,
     "candidates_count": 6,
     "analyzer_version": "3.0",
@@ -10,11 +10,11 @@
       "estimated_api_calls": 12
     },
     "rate_limiter_stats": {
-      "total_requests": 20,
+      "total_requests": 12,
       "requests_per_second_limit": 1.0,
-      "total_wait_time": 0
+      "total_wait_time": 3.5814363956451416
     },
-    "total_analysis_time": 161.65
+    "total_analysis_time": 49.08
   },
   "team_summary": {
     "members": [
@@ -89,352 +89,261 @@
   "candidates_analysis": [
     {
       "candidate_info": {
-        "id": "SE3",
-        "name": "David Lee",
-        "position": "Software Engineer",
-        "traits_source": "extracted",
-        "personality_traits": {
-          "openness": 0.2,
-          "conscientiousness": 0.3,
-          "extraversion": 0.1,
-          "agreeableness": 0.2,
-          "neuroticism": 0.8
-        }
-      },
-      "ai_analysis": {
-        "compatibility_score": 0.3,
-        "confidence_level": 0.85,
-        "summary": "David Lee's low openness and conscientiousness, combined with high neuroticism, suggest a poor fit with the current team's dynamic and collaborative culture. His preference for working alone and resistance to change could hinder team cohesion and project progress.",
-        "strengths": [
-          "May perform well in isolated tasks requiring deep focus.",
-          "Potential to bring a different perspective due to his resistance to change, challenging the team to justify innovations.",
-          "Low extraversion might reduce interpersonal conflicts in a highly extroverted team."
-        ],
-        "concerns": [
-          "Low agreeableness and openness could stifle collaboration and innovation.",
-          "High neuroticism may lead to stress under pressure, affecting team morale.",
-          "Disregard for planning and documentation could disrupt project management and knowledge sharing."
-        ],
-        "recommendations": [
-          "Consider a trial period to assess actual team interaction and contribution, with clear metrics for collaboration and adaptability.",
-          "Pair with a mentor from the team to encourage openness to new ideas and improve communication skills.",
-          "Provide structured onboarding focusing on the importance of team rituals and documentation in the company's culture."
-        ],
-        "team_dynamics_impact": {
-          "likely_role": "Isolated contributor, potentially creating silos within the team.",
-          "collaboration_style": "Minimalist, preferring asynchronous communication and avoiding team meetings.",
-          "influence_on_team": "Could introduce friction by challenging the team's collaborative norms and resistance to adopting new technologies."
-        },
-        "development_opportunities": [
-          "Enhancing openness to new technologies and methodologies through targeted learning and development programs.",
-          "Improving communication and teamwork skills through workshops and team-building activities."
-        ],
-        "risk_factors": [
-          "Potential to become a bottleneck in projects requiring adaptability and teamwork.",
-          "Risk of disengagement or dissatisfaction due to misalignment with team culture and values."
-        ]
-      },
-      "overall_recommendation": {
-        "status": "NOT RECOMMENDED",
-        "combined_score": 0.3,
-        "reasoning": "Significant compatibility concerns across multiple dimensions.",
-        "confidence_level": 0.85
-      }
-    },
-    {
-      "candidate_info": {
-        "id": "SE2",
-        "name": "Bob Johnson",
-        "position": "Software Engineer",
-        "traits_source": "extracted",
-        "personality_traits": {
-          "openness": 0.7,
-          "conscientiousness": 0.75,
-          "extraversion": 0.5,
-          "agreeableness": 0.8,
-          "neuroticism": 0.4
-        }
-      },
-      "ai_analysis": {
-        "compatibility_score": 0.75,
-        "confidence_level": 0.85,
-        "summary": "Bob Johnson presents a balanced fit for the team, with a strong agreeableness score that suggests good interpersonal skills, though his preference for independent work may require adjustment in a collaborative environment. His conscientiousness and openness indicate he can adapt and contribute effectively, but his lower extraversion might limit spontaneous team interactions.",
-        "strengths": [
-          "High agreeableness facilitates smooth interpersonal relations and conflict resolution.",
-          "Moderate openness suggests a good balance between creativity and practicality, fitting well with the team's innovative yet structured projects.",
-          "Conscientiousness level indicates reliability and a strong work ethic, aligning with the team's high standards."
-        ],
-        "concerns": [
-          "Preference for independent work may reduce spontaneous collaboration opportunities.",
-          "Lower extraversion could limit his visibility in team settings, potentially affecting team cohesion.",
-          "Admitted challenges in quickly mastering new technologies could pose risks in fast-paced project environments."
-        ],
-        "recommendations": [
-          "Encourage participation in structured team-building activities to enhance his comfort with collaboration.",
-          "Assign a mentor from the team to help him navigate the collaborative aspects of projects more effectively.",
-          "Provide clear expectations on the balance between independent work and team collaboration to align his work style with team needs."
-        ],
-        "team_dynamics_impact": {
-          "likely_role": "Supportive contributor who excels in tasks requiring attention to detail and reliability.",
-          "collaboration_style": "Preferentially independent but capable of effective collaboration when clearly defined.",
-          "influence_on_team": "Likely to positively impact team culture through reliability and agreeableness, though may require encouragement to engage more openly."
-        },
-        "development_opportunities": [
-          "Enhancing collaborative skills through targeted team projects and feedback sessions.",
-          "Building confidence in rapid technology adoption through structured learning paths and peer support."
-        ],
-        "risk_factors": [
-          "Potential isolation due to preference for independent work, requiring active management to ensure integration.",
-          "Slower adaptation to new technologies could delay project timelines if not supported adequately."
-        ]
-      },
-      "overall_recommendation": {
-        "status": "RECOMMENDED",
-        "combined_score": 0.75,
-        "reasoning": "Good compatibility with positive indicators for team fit.",
-        "confidence_level": 0.85
-      }
-    },
-    {
-      "candidate_info": {
-        "id": "SE5",
+        "id": "s5e954se6-74f6-425f-fba6-972cb410c79z",
         "name": "Carol Davis",
         "position": "Software Engineer",
         "traits_source": "extracted",
         "personality_traits": {
-          "openness": 0.2,
-          "conscientiousness": 0.3,
-          "extraversion": 0.1,
-          "agreeableness": 0.2,
-          "neuroticism": 0.8
-        }
-      },
-      "ai_analysis": {
-        "compatibility_score": 0.3,
-        "confidence_level": 0.85,
-        "summary": "Carol Davis's low openness, conscientiousness, and agreeableness, coupled with high neuroticism, suggest a poor fit with the current team's dynamic and values. Her reluctance to embrace new technologies, disorganized approach to work, and aversion to collaboration present significant challenges to team cohesion and productivity.",
-        "strengths": [
-          "May excel in environments requiring minimal collaboration and innovation.",
-          "Potential for deep focus on coding tasks without the need for frequent social interactions.",
-          "Could bring a different perspective to problem-solving, albeit limited by resistance to new technologies."
-        ],
-        "concerns": [
-          "Resistance to learning new technologies could hinder team innovation and adaptability.",
-          "Poor time management and disregard for deadlines may disrupt project timelines.",
-          "Low agreeableness and extraversion could lead to conflicts and reduced team cohesion."
-        ],
-        "recommendations": [
-          "Consider a trial period with clear expectations on collaboration and openness to learning.",
-          "Pair with a mentor from the team to encourage engagement with new technologies and methodologies.",
-          "Provide structured project management tools and training to improve organization and deadline adherence."
-        ],
-        "team_dynamics_impact": {
-          "likely_role": "Isolated contributor, potentially creating silos within the team.",
-          "collaboration_style": "Minimalist, preferring to work alone and communicate as little as possible.",
-          "influence_on_team": "Likely negative, potentially lowering morale and hindering team innovation and cohesion."
-        },
-        "development_opportunities": [
-          "Encourage participation in team meetings and presentations to build confidence and improve communication skills.",
-          "Offer training on new technologies and frameworks to broaden technical skills and adaptability."
-        ],
-        "risk_factors": [
-          "High risk of disengagement and resistance to team norms and culture.",
-          "Potential for conflict with team members who value collaboration and innovation."
-        ]
-      },
-      "overall_recommendation": {
-        "status": "NOT RECOMMENDED",
-        "combined_score": 0.3,
-        "reasoning": "Significant compatibility concerns across multiple dimensions.",
-        "confidence_level": 0.85
-      }
-    },
-    {
-      "candidate_info": {
-        "id": "SE1",
-        "name": "Alice Smith",
-        "position": "Software Engineer",
-        "traits_source": "extracted",
-        "personality_traits": {
-          "openness": 0.65,
-          "conscientiousness": 0.8,
+          "openness": 0.5,
+          "conscientiousness": 0.5,
           "extraversion": 0.5,
-          "agreeableness": 0.75,
-          "neuroticism": 0.4
+          "agreeableness": 0.5,
+          "neuroticism": 0.5
         }
       },
       "ai_analysis": {
-        "compatibility_score": 0.75,
-        "confidence_level": 0.85,
-        "summary": "Alice Smith presents a solid fit for the team with her balanced personality traits, showing potential for effective collaboration and integration. Her conscientiousness and agreeableness align well with the team's dynamics, though her lower extraversion and openness may require some adaptation.",
+        "compatibility_score": 0.5,
+        "confidence_level": 0.3,
+        "summary": "AI analysis unavailable",
         "strengths": [
-          "High conscientiousness ensures reliability and attention to detail in projects.",
-          "Moderate agreeableness suggests she will work well in a team, avoiding unnecessary conflicts.",
-          "Her approach to learning and project management indicates a methodical and practical work style."
+          "Fallback analysis"
         ],
         "concerns": [
-          "Lower openness may limit her adaptability to new technologies or innovative solutions.",
-          "Moderate extraversion could mean less initiative in group settings or larger team discussions.",
-          "Her nervousness with public speaking might affect her ability to present ideas confidently in larger groups."
+          "AI analysis unavailable"
         ],
         "recommendations": [
-          "Encourage participation in smaller team meetings to build confidence in group settings.",
-          "Provide opportunities for mentorship in areas requiring higher openness to new technologies.",
-          "Support her in developing public speaking skills through workshops or coaching."
+          "Conduct follow-up interviews",
+          "Consider team integration plan"
         ],
-        "team_dynamics_impact": {
-          "likely_role": "Supportive team member who contributes reliably to projects.",
-          "collaboration_style": "Prefers one-on-one interactions but can adapt to team collaboration with support.",
-          "influence_on_team": "Likely to enhance team cohesion through her agreeable and conscientious nature, though may not significantly drive innovation."
-        },
-        "development_opportunities": [
-          "Enhancing openness to new technologies through structured learning paths.",
-          "Building confidence in public speaking and group presentations."
-        ],
-        "risk_factors": [
-          "Potential resistance to adopting new technologies quickly.",
-          "May require additional support to engage fully in team brainstorming sessions."
-        ]
+        "team_dynamics_impact": {},
+        "development_opportunities": [],
+        "risk_factors": []
       },
       "overall_recommendation": {
-        "status": "RECOMMENDED",
-        "combined_score": 0.75,
-        "reasoning": "Good compatibility with positive indicators for team fit.",
-        "confidence_level": 0.85
+        "status": "CAUTIOUS",
+        "combined_score": 0.5,
+        "reasoning": "Lower compatibility scores suggest careful consideration needed.",
+        "confidence_level": 0.3
       }
     },
     {
       "candidate_info": {
-        "id": "DSM",
-        "name": "Mohammed",
+        "id": "8d8dff84-7aeb-4fda-a497-0e941cd5d04e",
+        "name": "Mohammed ELASRI",
+        "position": "Senior Software Engineer",
+        "traits_source": "extracted",
+        "personality_traits": {
+          "openness": 0.5,
+          "conscientiousness": 0.5,
+          "extraversion": 0.5,
+          "agreeableness": 0.5,
+          "neuroticism": 0.5
+        }
+      },
+      "ai_analysis": {
+        "compatibility_score": 0.5,
+        "confidence_level": 0.3,
+        "summary": "AI analysis unavailable",
+        "strengths": [
+          "Fallback analysis"
+        ],
+        "concerns": [
+          "AI analysis unavailable"
+        ],
+        "recommendations": [
+          "Conduct follow-up interviews",
+          "Consider team integration plan"
+        ],
+        "team_dynamics_impact": {},
+        "development_opportunities": [],
+        "risk_factors": []
+      },
+      "overall_recommendation": {
+        "status": "CAUTIOUS",
+        "combined_score": 0.5,
+        "reasoning": "Lower compatibility scores suggest careful consideration needed.",
+        "confidence_level": 0.3
+      }
+    },
+    {
+      "candidate_info": {
+        "id": "95e954e6-74f6-425f-bba6-972cb410c797",
+        "name": "Hamza KARZAZ",
         "position": "Software Engineer",
         "traits_source": "extracted",
         "personality_traits": {
-          "openness": 0.95,
-          "conscientiousness": 0.98,
-          "extraversion": 0.85,
-          "agreeableness": 0.9,
-          "neuroticism": 0.1
+          "openness": 0.5,
+          "conscientiousness": 0.5,
+          "extraversion": 0.5,
+          "agreeableness": 0.5,
+          "neuroticism": 0.5
         }
       },
       "ai_analysis": {
-        "compatibility_score": 0.95,
-        "confidence_level": 0.9,
-        "summary": "Mohammed exhibits a high level of compatibility with the current team, showcasing exceptional openness, conscientiousness, and agreeableness. His proactive approach to learning and collaboration, combined with his methodical project management skills, positions him as a valuable asset to the team. His high extraversion and agreeableness suggest he will integrate well and enhance team dynamics.",
+        "compatibility_score": 0.5,
+        "confidence_level": 0.3,
+        "summary": "AI analysis unavailable",
         "strengths": [
-          "High openness and conscientiousness align well with the team's innovative and detail-oriented culture.",
-          "Strong communication and collaboration skills, evidenced by his ability to engage with diverse teams and stakeholders effectively.",
-          "Proactive in learning and adopting new technologies, which complements the team's forward-thinking approach."
+          "Fallback analysis"
         ],
         "concerns": [
-          "May set high expectations for team performance, which could pressure some members.",
-          "His high extraversion might overshadow quieter team members if not managed carefully."
+          "AI analysis unavailable"
         ],
         "recommendations": [
-          "Encourage Mohammed to mentor junior team members, leveraging his enthusiasm for teaching and collaboration.",
-          "Monitor team dynamics to ensure his high energy and expectations positively contribute without overwhelming others.",
-          "Pair him with team members who have lower extraversion to balance interactions and foster inclusive communication."
+          "Conduct follow-up interviews",
+          "Consider team integration plan"
         ],
-        "team_dynamics_impact": {
-          "likely_role": "Innovator and Collaborator",
-          "collaboration_style": "Engaging and inclusive, with a focus on consensus-building and knowledge sharing.",
-          "influence_on_team": "Likely to elevate team morale and innovation, fostering a culture of continuous learning and improvement."
-        },
-        "development_opportunities": [
-          "Further develop conflict resolution skills to navigate any potential disagreements constructively.",
-          "Opportunities to lead cross-functional projects, enhancing his leadership and strategic planning capabilities."
-        ],
-        "risk_factors": [
-          "Potential for burnout due to his high drive and commitment to excellence.",
-          "Risk of creating unintentional pressure on team members to match his pace and output."
-        ]
+        "team_dynamics_impact": {},
+        "development_opportunities": [],
+        "risk_factors": []
       },
       "overall_recommendation": {
-        "status": "HIGHLY RECOMMENDED",
-        "combined_score": 0.95,
-        "reasoning": "Strong compatibility across multiple assessment dimensions.",
-        "confidence_level": 0.9
+        "status": "CAUTIOUS",
+        "combined_score": 0.5,
+        "reasoning": "Lower compatibility scores suggest careful consideration needed.",
+        "confidence_level": 0.3
       }
     },
     {
       "candidate_info": {
-        "id": "SE0",
+        "id": "95e954e6-74f6-425f-bba6-972cb410c797",
+        "name": "Elon Musk",
+        "position": "Software Engineer",
+        "traits_source": "extracted",
+        "personality_traits": {
+          "openness": 0.5,
+          "conscientiousness": 0.5,
+          "extraversion": 0.5,
+          "agreeableness": 0.5,
+          "neuroticism": 0.5
+        }
+      },
+      "ai_analysis": {
+        "compatibility_score": 0.5,
+        "confidence_level": 0.3,
+        "summary": "AI analysis unavailable",
+        "strengths": [
+          "Fallback analysis"
+        ],
+        "concerns": [
+          "AI analysis unavailable"
+        ],
+        "recommendations": [
+          "Conduct follow-up interviews",
+          "Consider team integration plan"
+        ],
+        "team_dynamics_impact": {},
+        "development_opportunities": [],
+        "risk_factors": []
+      },
+      "overall_recommendation": {
+        "status": "CAUTIOUS",
+        "combined_score": 0.5,
+        "reasoning": "Lower compatibility scores suggest careful consideration needed.",
+        "confidence_level": 0.3
+      }
+    },
+    {
+      "candidate_info": {
+        "id": "s5ed54se6-74f6-425f-fba6-972cb410coiu",
+        "name": "Lynda Dupont",
+        "position": "Software Engineer",
+        "traits_source": "extracted",
+        "personality_traits": {
+          "openness": 0.5,
+          "conscientiousness": 0.5,
+          "extraversion": 0.5,
+          "agreeableness": 0.5,
+          "neuroticism": 0.5
+        }
+      },
+      "ai_analysis": {
+        "compatibility_score": 0.5,
+        "confidence_level": 0.3,
+        "summary": "AI analysis unavailable",
+        "strengths": [
+          "Fallback analysis"
+        ],
+        "concerns": [
+          "AI analysis unavailable"
+        ],
+        "recommendations": [
+          "Conduct follow-up interviews",
+          "Consider team integration plan"
+        ],
+        "team_dynamics_impact": {},
+        "development_opportunities": [],
+        "risk_factors": []
+      },
+      "overall_recommendation": {
+        "status": "CAUTIOUS",
+        "combined_score": 0.5,
+        "reasoning": "Lower compatibility scores suggest careful consideration needed.",
+        "confidence_level": 0.3
+      }
+    },
+    {
+      "candidate_info": {
+        "id": "e46f93a6-79af-48d9-a292-acc648b1d99b",
         "name": "Amine Marzouki",
         "position": "Software Engineer",
         "traits_source": "extracted",
         "personality_traits": {
-          "openness": 0.95,
-          "conscientiousness": 0.98,
-          "extraversion": 0.85,
-          "agreeableness": 0.9,
-          "neuroticism": 0.1
+          "openness": 0.5,
+          "conscientiousness": 0.5,
+          "extraversion": 0.5,
+          "agreeableness": 0.5,
+          "neuroticism": 0.5
         }
       },
       "ai_analysis": {
-        "compatibility_score": 0.95,
-        "confidence_level": 0.9,
-        "summary": "Amine Marzouki exhibits a high degree of compatibility with the current team, showcasing exceptional adaptability, meticulous planning skills, and outstanding communication abilities. His personality traits and professional approach align well with the team's dynamics, promising to enhance collaboration and innovation.",
+        "compatibility_score": 0.5,
+        "confidence_level": 0.3,
+        "summary": "AI analysis unavailable",
         "strengths": [
-          "High openness and conscientiousness align with the team's values of innovation and precision.",
-          "Strong extraversion and agreeableness facilitate effective communication and teamwork.",
-          "Demonstrated leadership in adapting to change and fostering team learning.",
-          "Exceptional project management and organizational skills that complement the team's workflow.",
-          "Ability to translate technical concepts for non-technical stakeholders enhances cross-functional collaboration."
+          "Fallback analysis"
         ],
         "concerns": [
-          "May set high expectations for team performance that could pressure some members.",
-          "Potential for over-reliance on his leadership in times of change, possibly stifling others' initiative."
+          "AI analysis unavailable"
         ],
         "recommendations": [
-          "Encourage Amine to mentor team members in project management and technical translation skills.",
-          "Monitor team dynamics to ensure his high energy and expectations are motivating, not overwhelming.",
-          "Leverage his adaptability and leadership in upcoming projects requiring innovation or change management.",
-          "Facilitate opportunities for Amine to collaborate with each team member to strengthen individual relationships."
+          "Conduct follow-up interviews",
+          "Consider team integration plan"
         ],
-        "team_dynamics_impact": {
-          "likely_role": "Innovator and facilitator of team learning and adaptation.",
-          "collaboration_style": "Engaging, systematic, and inclusive, with a focus on shared success.",
-          "influence_on_team": "Likely to elevate team performance, foster a culture of continuous improvement, and enhance cross-functional communication."
-        },
-        "development_opportunities": [
-          "Further develop conflict resolution skills to navigate any potential disagreements within the team.",
-          "Explore opportunities to delegate more to foster team members' growth and autonomy."
-        ],
-        "risk_factors": [
-          "Risk of burnout due to high personal standards and workload.",
-          "Potential for minor conflicts if team members feel overshadowed by his strong presence."
-        ]
+        "team_dynamics_impact": {},
+        "development_opportunities": [],
+        "risk_factors": []
       },
       "overall_recommendation": {
-        "status": "HIGHLY RECOMMENDED",
-        "combined_score": 0.95,
-        "reasoning": "Strong compatibility across multiple assessment dimensions.",
-        "confidence_level": 0.9
+        "status": "CAUTIOUS",
+        "combined_score": 0.5,
+        "reasoning": "Lower compatibility scores suggest careful consideration needed.",
+        "confidence_level": 0.3
       }
     }
   ],
   "team_insights": {
     "candidate_pool_summary": {
-      "average_compatibility": 0.667,
-      "best_compatibility": 0.95,
-      "compatibility_range": 0.65,
-      "candidates_above_threshold": 4
+      "average_compatibility": 0.5,
+      "best_compatibility": 0.5,
+      "compatibility_range": 0.0,
+      "candidates_above_threshold": 0
     },
     "top_candidates": [
       {
-        "name": "Mohammed",
-        "compatibility": 0.95,
-        "recommendation": "HIGHLY RECOMMENDED"
+        "name": "Carol Davis",
+        "compatibility": 0.5,
+        "recommendation": "CAUTIOUS"
       },
       {
-        "name": "Amine Marzouki",
-        "compatibility": 0.95,
-        "recommendation": "HIGHLY RECOMMENDED"
+        "name": "Mohammed ELASRI",
+        "compatibility": 0.5,
+        "recommendation": "CAUTIOUS"
       },
       {
-        "name": "Bob Johnson",
-        "compatibility": 0.75,
-        "recommendation": "RECOMMENDED"
+        "name": "Hamza KARZAZ",
+        "compatibility": 0.5,
+        "recommendation": "CAUTIOUS"
       }
     ]
   }
