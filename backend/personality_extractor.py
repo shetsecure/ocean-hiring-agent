@@ -85,21 +85,32 @@ class PersonalityTraitsExtractor:
             
             response = self._make_api_request_with_retry(
                 model=os.getenv('MISTRAL_MODEL', 'mistral-small-latest'),
-                # model=os.getenv('OPENAI_MODEL', 'deepseek-chat'),
-                
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
                 ],
-                temperature=0.1
+                temperature=0.1,
+                max_tokens=500,
+                response_format={"type": "json_object"}
             )
             
+            # Get response content - should be valid JSON now
             content = response.choices[0].message.content
+            
+            if not content or content.strip() == "":
+                logger.error("API returned empty content")
+                return self._get_default_traits()
+            
+            # Parse JSON directly (no need to clean markdown since we use response_format)
             traits = json.loads(content)
             
             # Validate and normalize traits
             return self._validate_and_normalize_traits(traits)
             
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON parsing error: {str(e)}")
+            logger.error(f"Raw content was: {repr(content)}")
+            return self._get_default_traits()
         except Exception as e:
             logger.error(f"Error extracting personality traits: {str(e)}")
             return self._get_default_traits()

@@ -51,12 +51,13 @@ class AIAssistant:
         
         # Data file path - check if running in Docker or use env var
         data_file_path = os.getenv("COMPATIBILITY_SCORES_FILE")
-        if data_file_path:
-            self.compatibility_file = data_file_path
-        elif os.path.exists("/app/data/compatibility_scores.json"):  # Docker path
-            self.compatibility_file = "/app/data/compatibility_scores.json"
-        else:  # Local development path
-            self.compatibility_file = "../data/compatibility_scores.json"
+        data_file_path = "data/compatibility_scores.json"
+        # if data_file_path:
+        #     self.compatibility_file = data_file_path
+        # elif os.path.exists("/app/data/compatibility_scores.json"):  # Docker path
+        #     self.compatibility_file = "/app/data/compatibility_scores.json"
+        # else:  # Local development path
+        #     self.compatibility_file = "../data/compatibility_scores.json"
         
         if not self.weaviate_url or not self.weaviate_api_key:
             raise ValueError("Weaviate URL and API key are required. Check your .env file.")

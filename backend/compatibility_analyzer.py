@@ -341,15 +341,27 @@ class CompatibilityAnalyzer:
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.3,
-                max_tokens=2000
+                max_tokens=2000,
+                response_format={"type": "json_object"}
             )
             
+            # Get response content - should be valid JSON now
             content = response.choices[0].message.content
+            
+            if not content or content.strip() == "":
+                logger.error("AI analysis API returned empty content")
+                return self._get_fallback_analysis()
+            
+            # Parse JSON directly (no need to clean markdown since we use response_format)
             analysis = json.loads(content)
             
             # Validate the response structure
             return self._validate_ai_analysis(analysis)
             
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON parsing error in AI analysis: {str(e)}")
+            logger.error(f"Raw content was: {repr(content)}")
+            return self._get_fallback_analysis()
         except Exception as e:
             logger.error(f"Error in AI analysis: {str(e)}")
             return self._get_fallback_analysis()
