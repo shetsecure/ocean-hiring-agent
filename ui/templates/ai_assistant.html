@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Ocean Hiring Agent</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ai_assistant.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-wave-square"></i>
+                    <span class="logo-text">Ocean Hiring Agent</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="/dashboard" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/interview" class="nav-item">
+                    <i class="fas fa-video"></i>
+                    <span>Interviews</span>
+                </a>
+                <a href="/ai-assistant" class="nav-item active">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Assistant</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <div class="header-left">
+                    <h1 class="page-title">
+                        <i class="fas fa-robot"></i>
+                        AI Assistant
+                    </h1>
+                    <p class="page-subtitle">Ask questions about your candidates and get intelligent insights</p>
+                </div>
+                <div class="header-right">
+                    <div class="status-indicator">
+                        <div class="status-dot status-online"></div>
+                        <span>AI Ready</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ai-assistant-container">
+                <!-- Chat Interface -->
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-title">
+                            <i class="fas fa-comments"></i>
+                            <span>Chat with AI Assistant</span>
+                        </div>
+                        <button class="clear-chat-btn" onclick="clearChat()">
+                            <i class="fas fa-trash"></i>
+                            Clear Chat
+                        </button>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message ai-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    Hello! I'm your AI Assistant. I can help you analyze your candidates and answer questions about their compatibility, personality traits, and fit for your team. Try asking me something like:
+                                    <ul>
+                                        <li>"Who's the most outgoing candidate?"</li>
+                                        <li>"Which candidate would work best with our team?"</li>
+                                        <li>"Compare the leadership qualities of our candidates"</li>
+                                        <li>"Who has the strongest technical skills?"</li>
+                                    </ul>
+                                </div>
+                                <div class="message-time">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="chatInput" placeholder="Ask me anything about your candidates..." class="chat-input">
+                            <button id="sendButton" class="send-button" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="quick-questions">
+                            <span class="quick-questions-label">Quick questions:</span>
+                            <button class="quick-question-btn" onclick="askQuickQuestion('Who is the most outgoing candidate?')">
+                                Most outgoing?
+                            </button>
+                            <button class="quick-question-btn" onclick="askQuickQuestion('Which candidate has the best leadership skills?')">
+                                Best leader?
+                            </button>
+                            <button class="quick-question-btn" onclick="askQuickQuestion('Who would fit best with our team culture?')">
+                                Best team fit?
+                            </button>
+                            <button class="quick-question-btn" onclick="askQuickQuestion('Compare all candidates technical skills')">
+                                Technical skills?
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Candidates Summary Panel -->
+                <div class="candidates-panel">
+                    <div class="panel-header">
+                        <h3>
+                            <i class="fas fa-users"></i>
+                            Available Candidates
+                        </h3>
+                    </div>
+                    <div class="candidates-list" id="candidatesList">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Loading candidates...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let chatHistory = [];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCandidates();
+            
+            // Add enter key support for chat input
+            document.getElementById('chatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+
+        async function loadCandidates() {
+            try {
+                const response = await fetch('/api/candidates');
+                const data = await response.json();
+                
+                const candidatesList = document.getElementById('candidatesList');
+                
+                if (data && data.candidates && data.candidates.length > 0) {
+                    candidatesList.innerHTML = data.candidates.map(candidate => `
+                        <div class="candidate-card">
+                            <div class="candidate-header">
+                                <div class="candidate-name">${candidate.name}</div>
+                                <div class="candidate-score">${candidate.compatibility_score}%</div>
+                            </div>
+                            <div class="candidate-traits">
+                                ${candidate.personality_traits ? Object.entries(candidate.personality_traits)
+                                    .slice(0, 3)
+                                    .map(([trait, score]) => `
+                                        <span class="trait-tag">${trait}: ${score}</span>
+                                    `).join('') : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    candidatesList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-user-plus"></i>
+                            <p>No candidates available</p>
+                            <small>Run some interviews first to get candidate data</small>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading candidates:', error);
+                document.getElementById('candidatesList').innerHTML = `
+                    <div class="error-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Error loading candidates</p>
+                    </div>
+                `;
+            }
+        }
+
+        function askQuickQuestion(question) {
+            document.getElementById('chatInput').value = question;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch('/api/ai-assistant/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        chat_history: chatHistory
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Remove typing indicator
+                removeTypingIndicator();
+                
+                if (data.success) {
+                    addMessage(data.response, 'ai');
+                    chatHistory.push({
+                        user: message,
+                        ai: data.response,
+                        timestamp: new Date().toISOString()
+                    });
+                } else {
+                    addMessage('Sorry, I encountered an error processing your request. Please try again.', 'ai', true);
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                removeTypingIndicator();
+                addMessage('Sorry, I\'m having trouble connecting right now. Please try again later.', 'ai', true);
+            }
+        }
+
+        function addMessage(text, sender, isError = false) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message ${isError ? 'error-message' : ''}`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-${sender === 'user' ? 'user' : 'robot'}"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">${text}</div>
+                    <div class="message-time">${timeString}</div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai-message typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function clearChat() {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML = `
+                <div class="message ai-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            Hello! I'm your AI Assistant. I can help you analyze your candidates and answer questions about their compatibility, personality traits, and fit for your team. Try asking me something like:
+                            <ul>
+                                <li>"Who's the most outgoing candidate?"</li>
+                                <li>"Which candidate would work best with our team?"</li>
+                                <li>"Compare the leadership qualities of our candidates"</li>
+                                <li>"Who has the strongest technical skills?"</li>
+                            </ul>
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+            `;
+            chatHistory = [];
+        }
+    </script>
+</body>
+</html> 

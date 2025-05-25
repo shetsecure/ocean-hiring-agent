@@ -7,11 +7,12 @@ Provides REST API endpoints for:
 - Extracting personality traits
 """
 import uvicorn
+import os
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Dict, Any
+from typing import Dict, Any, List
 import logging
 from datetime import datetime
 
@@ -363,6 +364,200 @@ async def get_candidate_stats():
     except Exception as e:
         logger.error(f"Error getting candidate stats: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to get candidate stats: {str(e)}")
+
+@app.post("/ai/chat")
+async def ai_chat(request: Dict[str, Any]):
+    """Enhanced AI chat endpoint with candidate data access."""
+    try:
+        messages = request.get("messages", [])
+        max_tokens = request.get("max_tokens", 800)
+        temperature = request.get("temperature", 0.7)
+        
+        if not messages:
+            raise HTTPException(status_code=400, detail="Messages are required")
+        
+        # Get the latest user message
+        latest_message = messages[-1].get("content", "") if messages else ""
+        
+        # Check if the query is about candidates and if AI Assistant is available
+        is_candidate_query = _is_candidate_related_query(latest_message)
+        
+        if is_candidate_query and ai_assistant:
+            # Use AI Assistant for candidate-related queries
+            try:
+                candidate_results = ai_assistant.query_candidates(latest_message, limit=5)
+                
+                if candidate_results.get("results_count", 0) > 0:
+                    # Format candidate data for conversational response
+                    response_text = _format_candidate_response(latest_message, candidate_results)
+                else:
+                    # No candidates found, but provide helpful context
+                    stats = ai_assistant.get_candidate_stats()
+                    if stats.get("total_candidates", 0) > 0:
+                        response_text = f"I couldn't find candidates matching '{latest_message}' specifically, but I have access to {stats['total_candidates']} candidates in the database. Try asking about specific traits like 'most outgoing', 'best team player', 'highest compatibility', or 'most creative' candidates."
+                    else:
+                        response_text = "I don't currently have any candidate data loaded. Please ensure candidate data has been synchronized to the AI Assistant database."
+                
+                return {
+                    "response": response_text,
+                    "success": True,
+                    "source": "candidate_database"
+                }
+                
+            except Exception as e:
+                logger.warning(f"AI Assistant query failed, falling back to general chat: {e}")
+                # Fall through to general chat
+        
+        # Use general AI chat (original functionality)
+        if not compatibility_analyzer:
+            raise HTTPException(status_code=503, detail="AI service not available")
+        
+        # Enhance the system message for better context
+        enhanced_messages = _enhance_messages_for_context(messages, ai_assistant)
+        
+        # Get the model from environment
+        model = os.getenv('MISTRAL_MODEL', 'mistral-small-latest')
+        
+        # Make the chat request using the existing AI client
+        response = compatibility_analyzer.client.chat.complete(
+            model=model,
+            messages=enhanced_messages,
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        
+        response_text = response.choices[0].message.content
+        
+        return {
+            "response": response_text,
+            "success": True,
+            "source": "general_ai"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error in AI chat: {e}")
+        return {
+            "response": "I'm sorry, I'm having trouble processing your request right now. Please try again later.",
+            "success": False,
+            "error": str(e)
+        }
+
+def _is_candidate_related_query(query: str) -> bool:
+    """Detect if a query is about candidates."""
+    candidate_keywords = [
+        "candidate", "candidates", "applicant", "applicants", 
+        "outgoing", "extraverted", "introvert", "creative", "organized",
+        "team player", "collaborative", "leadership", "compatible",
+        "personality", "traits", "scores", "recommendation",
+        "who is", "which candidate", "best fit", "most suitable",
+        "highest", "lowest", "compare", "rank", "top"
+    ]
+    
+    query_lower = query.lower()
+    return any(keyword in query_lower for keyword in candidate_keywords)
+
+def _format_candidate_response(query: str, candidate_results: Dict[str, Any]) -> str:
+    """Format candidate query results into a conversational response."""
+    candidates = candidate_results.get("candidates", [])
+    results_count = candidate_results.get("results_count", 0)
+    
+    if results_count == 0:
+        return "I couldn't find any candidates matching your query. Try asking about specific traits or characteristics."
+    
+    # Build conversational response
+    response_parts = []
+    
+    if results_count == 1:
+        candidate = candidates[0]
+        response_parts.append(f"Based on your query, I found **{candidate['name']}** who seems to be the best match.")
+    else:
+        response_parts.append(f"Based on your query, here are the top {min(results_count, 3)} candidates:")
+    
+    # Add candidate details
+    for i, candidate in enumerate(candidates[:3], 1):
+        name = candidate.get("name", "Unknown")
+        position = candidate.get("position", "Unknown Position")
+        compatibility = candidate.get("compatibility_score", 0)
+        recommendation = candidate.get("recommendation", "")
+        
+        # Get personality highlights
+        traits = candidate.get("personality_traits", {})
+        trait_highlights = []
+        
+        if traits.get("extraversion", 0) > 0.7:
+            trait_highlights.append("very outgoing and social")
+        if traits.get("openness", 0) > 0.7:
+            trait_highlights.append("highly creative and open to new ideas")
+        if traits.get("conscientiousness", 0) > 0.7:
+            trait_highlights.append("extremely organized and reliable")
+        if traits.get("agreeableness", 0) > 0.7:
+            trait_highlights.append("excellent team player")
+        
+        if results_count == 1:
+            response_parts.append(f"\n**{name}** ({position})")
+        else:
+            response_parts.append(f"\n{i}. **{name}** ({position})")
+        
+        response_parts.append(f"   - Compatibility Score: {compatibility:.1%}")
+        response_parts.append(f"   - Recommendation: {recommendation}")
+        
+        if trait_highlights:
+            response_parts.append(f"   - Key Traits: {', '.join(trait_highlights)}")
+        
+        # Add LLM reasoning if available
+        if candidate.get("relevance_reasoning"):
+            response_parts.append(f"   - Why they match: {candidate['relevance_reasoning']}")
+    
+    # Add summary
+    if results_count > 3:
+        response_parts.append(f"\n*({results_count - 3} more candidates available - ask for more specific criteria to narrow down results)*")
+    
+    return "\n".join(response_parts)
+
+def _enhance_messages_for_context(messages: List[Dict], ai_assistant) -> List[Dict]:
+    """Enhance messages with context about available data."""
+    enhanced_messages = []
+    
+    # Add system context
+    context_info = []
+    
+    if ai_assistant:
+        try:
+            stats = ai_assistant.get_candidate_stats()
+            if stats.get("total_candidates", 0) > 0:
+                context_info.append(f"You have access to {stats['total_candidates']} candidates with detailed personality and compatibility data.")
+                
+                if stats.get("recommendations_distribution"):
+                    rec_dist = stats["recommendations_distribution"]
+                    context_info.append(f"Recommendation distribution: {rec_dist}")
+            else:
+                context_info.append("No candidate data is currently available.")
+        except:
+            context_info.append("Candidate database access is limited.")
+    else:
+        context_info.append("You are a general HR and team compatibility assistant.")
+    
+    # Create enhanced system message
+    system_message = {
+        "role": "system",
+        "content": f"""You are an expert HR assistant specializing in team compatibility and candidate analysis. 
+
+{' '.join(context_info)}
+
+You help with:
+- Candidate evaluation and comparison
+- Team compatibility analysis  
+- Personality trait interpretation
+- Hiring recommendations
+- Interview insights
+
+Be helpful, professional, and data-driven in your responses."""
+    }
+    
+    enhanced_messages.append(system_message)
+    enhanced_messages.extend(messages)
+    
+    return enhanced_messages
 
 # Error handlers
 

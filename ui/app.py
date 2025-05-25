@@ -441,5 +441,177 @@ def get_interview_transcript_proxy(agent_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/ai-assistant')
+def ai_assistant():
+    """AI Assistant page for candidate analysis"""
+    return render_template('ai_assistant.html')
+
+@app.route('/api/ai-assistant/chat', methods=['POST'])
+def ai_assistant_chat():
+    """API endpoint for AI Assistant chat functionality"""
+    try:
+        data = request.get_json()
+        message = data.get('message', '').strip()
+        chat_history = data.get('chat_history', [])
+        
+        if not message:
+            return jsonify({'success': False, 'error': 'Message is required'}), 400
+        
+        # Load candidate and team data for context
+        dashboard_data = load_dashboard_data()
+        
+        if not dashboard_data:
+            return jsonify({
+                'success': True,
+                'response': "I'm sorry, but I don't have access to candidate data right now. Please make sure you have run some interviews and generated compatibility analysis first."
+            })
+        
+        # Prepare context for AI
+        context = {
+            'team_data': dashboard_data.get('team_data', {}),
+            'candidates': dashboard_data.get('candidates', []),
+            'compatibility_analysis': dashboard_data.get('compatibility_analysis', {}),
+            'chat_history': chat_history[-5:] if chat_history else []  # Last 5 messages for context
+        }
+        
+        # Create the AI prompt
+        system_prompt = f"""You are an AI Assistant for a hiring platform. You help analyze candidates and answer questions about their compatibility with the team.
+
+Current Team Data:
+{json.dumps(context['team_data'], indent=2)}
+
+Available Candidates:
+{json.dumps(context['candidates'], indent=2)}
+
+Compatibility Analysis:
+{json.dumps(context['compatibility_analysis'], indent=2)}
+
+Previous Chat Context:
+{json.dumps(context['chat_history'], indent=2)}
+
+Instructions:
+- Answer questions about candidates' personality traits, skills, and team compatibility
+- Be specific and reference actual data when possible
+- If asked to compare candidates, provide detailed comparisons
+- If asked about specific traits (like "most outgoing"), analyze the personality data
+- Keep responses conversational but informative
+- If you don't have enough data to answer, say so clearly
+- Focus on actionable insights for hiring decisions"""
+
+        user_prompt = f"User question: {message}"
+        
+        # Make request to backend AI service
+        ai_payload = {
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            "max_tokens": 500,
+            "temperature": 0.7
+        }
+        
+        # Call the backend AI service
+        ai_response = requests.post(
+            f"{API_BASE_URL}/ai/chat",
+            json=ai_payload,
+            headers={"Content-Type": "application/json"},
+            timeout=30
+        )
+        
+        if ai_response.status_code == 200:
+            ai_data = ai_response.json()
+            response_text = ai_data.get('response', 'I apologize, but I encountered an issue processing your request.')
+        else:
+            # Fallback response if AI service is not available
+            response_text = generate_fallback_response(message, context)
+        
+        return jsonify({
+            'success': True,
+            'response': response_text
+        })
+        
+    except requests.exceptions.ConnectionError:
+        # Fallback when backend is not available
+        try:
+            dashboard_data = load_dashboard_data()
+            context = {
+                'candidates': dashboard_data.get('candidates', []) if dashboard_data else [],
+                'team_data': dashboard_data.get('team_data', {}) if dashboard_data else {}
+            }
+            response_text = generate_fallback_response(message, context)
+            return jsonify({
+                'success': True,
+                'response': response_text
+            })
+        except Exception:
+            return jsonify({
+                'success': True,
+                'response': "I'm currently unable to access the AI service. Please try again later."
+            })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+def generate_fallback_response(message, context):
+    """Generate a simple fallback response when AI service is unavailable"""
+    message_lower = message.lower()
+    candidates = context.get('candidates', [])
+    
+    if not candidates:
+        return "I don't have any candidate data available right now. Please run some interviews first to get candidate information."
+    
+    # Simple keyword-based responses
+    if 'outgoing' in message_lower or 'extrovert' in message_lower:
+        # Find most extroverted candidate
+        best_candidate = None
+        highest_score = 0
+        for candidate in candidates:
+            traits = candidate.get('personality_traits', {})
+            extraversion = traits.get('extraversion', 0)
+            if extraversion > highest_score:
+                highest_score = extraversion
+                best_candidate = candidate
+        
+        if best_candidate:
+            return f"Based on the personality analysis, **{best_candidate['name']}** appears to be the most outgoing candidate with an extraversion score of {highest_score}. This suggests they are likely to be sociable, energetic, and comfortable in group settings."
+    
+    elif 'leader' in message_lower or 'leadership' in message_lower:
+        # Look for leadership-related traits
+        leadership_candidates = []
+        for candidate in candidates:
+            traits = candidate.get('personality_traits', {})
+            conscientiousness = traits.get('conscientiousness', 0)
+            extraversion = traits.get('extraversion', 0)
+            leadership_score = (conscientiousness + extraversion) / 2
+            leadership_candidates.append((candidate['name'], leadership_score))
+        
+        leadership_candidates.sort(key=lambda x: x[1], reverse=True)
+        if leadership_candidates:
+            top_candidate = leadership_candidates[0]
+            return f"For leadership potential, **{top_candidate[0]}** shows strong indicators with high conscientiousness and extraversion scores. These traits typically correlate with effective leadership abilities."
+    
+    elif 'team fit' in message_lower or 'culture' in message_lower:
+        # Look at compatibility scores
+        best_fit = None
+        highest_compatibility = 0
+        for candidate in candidates:
+            compatibility = candidate.get('compatibility_score', 0)
+            if compatibility > highest_compatibility:
+                highest_compatibility = compatibility
+                best_fit = candidate
+        
+        if best_fit:
+            return f"**{best_fit['name']}** has the highest team compatibility score at {highest_compatibility}%, suggesting they would integrate well with your current team culture and dynamics."
+    
+    elif 'technical' in message_lower or 'skills' in message_lower:
+        return f"I can see you have {len(candidates)} candidates in the system. For detailed technical skills analysis, I'd recommend reviewing their individual profiles and interview responses. Each candidate's technical competencies should be evaluated based on their specific interview performance and background."
+    
+    elif 'compare' in message_lower:
+        candidate_names = [c['name'] for c in candidates[:3]]  # Top 3
+        return f"I can help compare candidates! Currently, you have {len(candidates)} candidates: {', '.join(candidate_names)}{'...' if len(candidates) > 3 else ''}. For detailed comparisons, I'd need access to the full AI analysis service. In the meantime, you can review their compatibility scores and personality traits in the candidates panel."
+    
+    else:
+        # Generic helpful response
+        return f"I can help you analyze your {len(candidates)} candidates! I can answer questions about personality traits, team compatibility, leadership potential, and more. Try asking me something specific like 'Who is the most outgoing?' or 'Which candidate would fit best with our team?'"
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5005) 
