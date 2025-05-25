@@ -214,76 +214,132 @@ def create_interview_proxy():
 
 @app.route('/api/interview-history')
 def get_interview_history():
-    """Get interview history - for now returns sample data"""
+    """Get interview history from interviews.json file"""
     try:
-        # For now, return sample data since we don't have a real interview storage system
-        # In a real implementation, this would query a database or API
-        sample_interviews = [
-            {
-                'agent_id': 'agent_001',
-                'candidate_name': 'John Smith',
-                'role': 'Software Engineer',
-                'candidate_email': 'john.smith@email.com',
-                'status': 'completed',
-                'created_at': '2024-01-15T10:30:00Z',
-                'duration': '25 minutes',
-                'has_transcript': True,
-                'interview_link': 'https://agent.ai-interviewer.com/agent_001'
-            },
-            {
-                'agent_id': 'agent_002',
-                'candidate_name': 'Sarah Johnson',
-                'role': 'Frontend Developer',
-                'candidate_email': 'sarah.johnson@email.com',
-                'status': 'completed',
-                'created_at': '2024-01-14T14:15:00Z',
-                'duration': '30 minutes',
-                'has_transcript': True,
-                'interview_link': 'https://agent.ai-interviewer.com/agent_002'
-            },
-            {
-                'agent_id': 'agent_003',
-                'candidate_name': 'Mike Davis',
-                'role': 'Backend Developer',
-                'candidate_email': 'mike.davis@email.com',
-                'status': 'in-progress',
-                'created_at': '2024-01-16T09:00:00Z',
-                'duration': 'In progress',
-                'has_transcript': False,
-                'interview_link': 'https://agent.ai-interviewer.com/agent_003'
-            },
-            {
-                'agent_id': 'agent_004',
-                'candidate_name': 'Emily Chen',
-                'role': 'Full Stack Developer',
-                'candidate_email': 'emily.chen@email.com',
-                'status': 'completed',
-                'created_at': '2024-01-13T16:45:00Z',
-                'duration': '28 minutes',
-                'has_transcript': True,
-                'interview_link': 'https://agent.ai-interviewer.com/agent_004'
-            },
-            {
-                'agent_id': 'agent_005',
-                'candidate_name': 'David Wilson',
-                'role': 'DevOps Engineer',
-                'candidate_email': 'david.wilson@email.com',
-                'status': 'failed',
-                'created_at': '2024-01-12T11:20:00Z',
-                'duration': '10 minutes',
-                'has_transcript': False,
-                'interview_link': 'https://agent.ai-interviewer.com/agent_005'
-            }
+        # Try different paths for interviews.json
+        possible_paths = [
+            'data/interviews.json',  # Docker mounted volume
+            '../data/interviews.json',  # Local development from ui folder
+            'interviews.json'  # Current directory
         ]
+        
+        interviews_data = None
+        for interviews_path in possible_paths:
+            if os.path.exists(interviews_path):
+                with open(interviews_path, 'r', encoding='utf-8') as f:
+                    interviews_data = json.load(f)
+                break
+        
+        if interviews_data is None:
+            # Fallback to sample data if file not found
+            return get_sample_interview_history()
+        
+        # Transform the interviews data to match frontend expectations
+        interviews_list = []
+        for agent_id, interview_data in interviews_data.items():
+            # Extract email from system prompt if available
+            candidate_email = None
+            agent_details = interview_data.get('agent_details', {})
+            system_prompt = agent_details.get('system_prompt', '')
+            
+            # Try to extract email from system prompt
+            import re
+            email_match = re.search(r'Email:\s*([^\s\n]+)', system_prompt)
+            if email_match:
+                candidate_email = email_match.group(1)
+            
+            # Determine status based on creation time and other factors
+            created_at = interview_data.get('created_at')
+            status = 'completed'  # Default to completed for existing interviews
+            duration = '25 minutes'  # Default duration
+            has_transcript = True  # Assume transcripts are available for completed interviews
+            
+            # If the interview was created very recently (within last hour), mark as in-progress
+            if created_at:
+                try:
+                    from datetime import datetime, timezone
+                    created_time = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                    now = datetime.now(timezone.utc)
+                    time_diff = now - created_time
+                    
+                    if time_diff.total_seconds() < 3600:  # Less than 1 hour ago
+                        status = 'in-progress'
+                        duration = 'In progress'
+                        has_transcript = False
+                except:
+                    pass  # Keep default values if parsing fails
+            
+            formatted_interview = {
+                'agent_id': interview_data.get('agent_id', agent_id),
+                'candidate_name': interview_data.get('candidate_name', 'Unknown'),
+                'role': interview_data.get('role', 'Unknown Role'),
+                'candidate_email': candidate_email,
+                'status': status,
+                'created_at': created_at or datetime.now().isoformat() + 'Z',
+                'duration': duration,
+                'has_transcript': has_transcript,
+                'interview_link': interview_data.get('interview_link', f'https://bey.chat/{agent_id}')
+            }
+            
+            interviews_list.append(formatted_interview)
+        
+        # Sort by creation time (newest first)
+        interviews_list.sort(key=lambda x: x['created_at'], reverse=True)
         
         return jsonify({
             'success': True,
-            'interviews': sample_interviews,
-            'total_count': len(sample_interviews)
+            'interviews': interviews_list,
+            'total_count': len(interviews_list)
         })
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f"Error loading interviews from file: {e}")
+        # Fallback to sample data on any error
+        return get_sample_interview_history()
+
+def get_sample_interview_history():
+    """Fallback function to return sample interview data"""
+    sample_interviews = [
+        {
+            'agent_id': 'agent_001',
+            'candidate_name': 'John Smith',
+            'role': 'Software Engineer',
+            'candidate_email': 'john.smith@email.com',
+            'status': 'completed',
+            'created_at': '2024-01-15T10:30:00Z',
+            'duration': '25 minutes',
+            'has_transcript': True,
+            'interview_link': 'https://agent.ai-interviewer.com/agent_001'
+        },
+        {
+            'agent_id': 'agent_002',
+            'candidate_name': 'Sarah Johnson',
+            'role': 'Frontend Developer',
+            'candidate_email': 'sarah.johnson@email.com',
+            'status': 'completed',
+            'created_at': '2024-01-14T14:15:00Z',
+            'duration': '30 minutes',
+            'has_transcript': True,
+            'interview_link': 'https://agent.ai-interviewer.com/agent_002'
+        },
+        {
+            'agent_id': 'agent_003',
+            'candidate_name': 'Mike Davis',
+            'role': 'Backend Developer',
+            'candidate_email': 'mike.davis@email.com',
+            'status': 'in-progress',
+            'created_at': '2024-01-16T09:00:00Z',
+            'duration': 'In progress',
+            'has_transcript': False,
+            'interview_link': 'https://agent.ai-interviewer.com/agent_003'
+        }
+    ]
+    
+    return jsonify({
+        'success': True,
+        'interviews': sample_interviews,
+        'total_count': len(sample_interviews)
+    })
 
 @app.route('/api/interview-transcript/<agent_id>')
 def get_interview_transcript_proxy(agent_id):

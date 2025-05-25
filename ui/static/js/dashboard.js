@@ -458,6 +458,9 @@ class TeamCompatibilityDashboard {
         const container = document.getElementById('candidates-grid');
         if (!container) return;
 
+        // Clean up existing radar charts
+        this.cleanupRadarCharts();
+
         container.innerHTML = this.filteredCandidates.map(candidate => {
             const info = candidate.candidate_info;
             const aiAnalysis = candidate.ai_analysis;
@@ -481,24 +484,34 @@ class TeamCompatibilityDashboard {
                     <div class="recommendation-badge ${recommendationClass}">
                         ${this.formatRecommendationLabel(recommendation.status)}
                     </div>
-                    <div class="candidate-highlights">
-                        <h5>Key Strengths</h5>
-                        <ul class="highlights-list">
-                            ${aiAnalysis.strengths.slice(0, 2).map(strength => 
-                                `<li>${strength}</li>`
-                            ).join('')}
-                        </ul>
+                    <div class="candidate-content">
+                        <div class="radar-chart-container">
+                            <canvas id="radarChart-${info.id}" class="radar-chart" width="140" height="140"></canvas>
+                        </div>
+                        <div class="candidate-highlights">
+                            <h5>Key Strengths</h5>
+                            <ul class="highlights-list">
+                                ${aiAnalysis.strengths.slice(0, 2).map(strength => 
+                                    `<li>${strength}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             `;
         }).join('');
 
-        // Add click handlers for candidate cards
+        // Add click handlers for candidate cards and create radar charts
         container.querySelectorAll('.candidate-card').forEach(card => {
             card.addEventListener('click', () => {
                 const candidateId = card.dataset.candidateId;
                 this.showCandidateDetails(candidateId);
             });
+        });
+
+        // Create radar charts for each candidate
+        this.filteredCandidates.forEach(candidate => {
+            this.createRadarChart(candidate);
         });
     }
 
@@ -519,6 +532,153 @@ class TeamCompatibilityDashboard {
         if (score >= 0.6) return '#3b82f6';
         if (score >= 0.4) return '#f59e0b';
         return '#ef4444';
+    }
+
+    createRadarChart(candidate) {
+        const canvasId = `radarChart-${candidate.candidate_info.id}`;
+        const canvas = document.getElementById(canvasId);
+        
+        if (!canvas) {
+            console.warn(`Canvas not found for candidate: ${candidate.candidate_info.id}`);
+            return;
+        }
+
+        const ctx = canvas.getContext('2d');
+        const personalityTraits = candidate.candidate_info.personality_traits;
+
+        // The Big Five traits in order (using initials for better visibility)
+        const traitLabels = ['O', 'C', 'E', 'A', 'N'];
+        const traitFullNames = ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'];
+        
+        // Extract values and convert to 0-100 scale
+        const values = traitFullNames.map(trait => {
+            const traitKey = trait.toLowerCase();
+            let value = personalityTraits[traitKey];
+            
+            // Try alternative key formats if not found
+            if (value === undefined) {
+                const alternativeKeys = [
+                    traitKey.replace('ness', ''),
+                    traitKey.replace(' ', '_'),
+                    trait.toLowerCase().replace(' ', '_')
+                ];
+                
+                for (const altKey of alternativeKeys) {
+                    if (personalityTraits[altKey] !== undefined) {
+                        value = personalityTraits[altKey];
+                        break;
+                    }
+                }
+            }
+            
+            return value !== undefined ? (value * 100) : 50; // Default to 50 if not found
+        });
+
+        const radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: traitLabels,
+                datasets: [{
+                    label: 'Big Five Profile',
+                    data: values,
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                    pointBorderColor: 'rgba(99, 102, 241, 1)',
+                    pointRadius: 3,
+                    pointHoverRadius: 4,
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    borderColor: 'rgba(99, 102, 241, 0.8)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Big Five Profile',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            bottom: 10
+                        }
+                    },
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const fullName = traitFullNames[context.dataIndex];
+                                return `${fullName}: ${context.parsed.r.toFixed(0)}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20,
+                            font: {
+                                size: 8
+                            },
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                elements: {
+                    point: {
+                        borderWidth: 1
+                    }
+                },
+                // Disable animations for better performance
+                animation: {
+                    duration: 0
+                },
+                transitions: {
+                    active: {
+                        animation: {
+                            duration: 0
+                        }
+                    }
+                }
+            }
+        });
+
+        // Store chart reference for cleanup if needed
+        if (!this.radarCharts) {
+            this.radarCharts = {};
+        }
+        this.radarCharts[candidate.candidate_info.id] = radarChart;
+    }
+
+    cleanupRadarCharts() {
+        if (this.radarCharts) {
+            Object.values(this.radarCharts).forEach(chart => {
+                if (chart && typeof chart.destroy === 'function') {
+                    chart.destroy();
+                }
+            });
+            this.radarCharts = {};
+        }
     }
 
     showCandidateDetails(candidateId) {

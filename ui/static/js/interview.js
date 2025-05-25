@@ -574,9 +574,33 @@ class InterviewManager {
 
     updateInterviewStatus(status, type = 'info') {
         const statusElement = document.getElementById('interview-status');
-        const indicator = statusElement.querySelector('.status-indicator');
+        if (!statusElement) {
+            console.warn('Interview status element not found');
+            return;
+        }
         
-        statusElement.querySelector('i + *').textContent = status;
+        const indicator = statusElement.querySelector('.status-indicator');
+        console.log("interview status: " + status);
+        
+        // Try different selectors to find the status text element
+        let statusTextElement = statusElement.querySelector('i + *');
+        if (!statusTextElement) {
+            // Try alternative selectors
+            statusTextElement = statusElement.querySelector('.status-text');
+            if (!statusTextElement) {
+                statusTextElement = statusElement.querySelector('span');
+                if (!statusTextElement) {
+                    // Create a status text element if none exists
+                    statusTextElement = document.createElement('span');
+                    statusTextElement.className = 'status-text';
+                    statusElement.appendChild(statusTextElement);
+                }
+            }
+        }
+        
+        if (statusTextElement) {
+            statusTextElement.textContent = status;
+        }
         
         // Update status color
         statusElement.className = 'interview-status';
@@ -593,7 +617,9 @@ class InterviewManager {
         if (colors[type]) {
             statusElement.style.background = `${colors[type]}20`;
             statusElement.style.color = colors[type];
-            indicator.style.color = colors[type];
+            if (indicator) {
+                indicator.style.color = colors[type];
+            }
         }
     }
 
