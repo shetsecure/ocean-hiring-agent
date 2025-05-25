@@ -1,20 +1,20 @@
 {
   "analysis_metadata": {
-    "timestamp": "2025-05-25T11:56:59.333447",
+    "timestamp": "2025-05-25T12:23:28.791138",
     "team_size": 6,
-    "candidates_count": 6,
+    "candidates_count": 2,
     "analyzer_version": "3.0",
     "analysis_type": "ai_only",
     "rate_limit_info": {
       "requests_per_second": 1.0,
-      "estimated_api_calls": 12
+      "estimated_api_calls": 4
     },
     "rate_limiter_stats": {
-      "total_requests": 36,
+      "total_requests": 4,
       "requests_per_second_limit": 1.0,
-      "total_wait_time": 23.205272436141968
+      "total_wait_time": 0
     },
-    "total_analysis_time": 54.04
+    "total_analysis_time": 19.68
   },
   "team_summary": {
     "members": [
@@ -89,121 +89,6 @@
   "candidates_analysis": [
     {
       "candidate_info": {
-        "id": "s5e954se6-74f6-425f-fba6-972cb410c79z",
-        "name": "Carol Davis",
-        "position": "Software Engineer",
-        "traits_source": "extracted",
-        "personality_traits": {
-          "openness": 0.2,
-          "conscientiousness": 0.3,
-          "extraversion": 0.1,
-          "agreeableness": 0.2,
-          "neuroticism": 0.8
-        }
-      },
-      "ai_analysis": {
-        "compatibility_score": 0.35,
-        "confidence_level": 0.9,
-        "summary": "Carol Davis presents significant challenges for team compatibility due to her low openness, conscientiousness, and extraversion, coupled with high neuroticism. Her resistance to learning new technologies and aversion to team interactions may hinder collaboration and adaptability. However, her technical skills in Java could be leveraged if she is willing to adapt.",
-        "strengths": [
-          "Proven technical expertise in Java, which can be valuable for specific projects.",
-          "Potential to bring a different perspective due to her independent work style.",
-          "May offer a stable, consistent work ethic in tasks she is comfortable with."
-        ],
-        "concerns": [
-          "Extremely low openness to new ideas and technologies, which may limit adaptability and innovation.",
-          "High neuroticism may lead to increased stress and potential burnout in a team environment.",
-          "Low agreeableness and extraversion suggest potential difficulties in team collaboration and communication."
-        ],
-        "recommendations": [
-          "Conduct a trial period to assess Carol's adaptability and willingness to engage with the team.",
-          "Provide structured mentoring focused on openness to new technologies and team collaboration.",
-          "Encourage regular check-ins to monitor stress levels and provide support as needed."
-        ],
-        "team_dynamics_impact": {
-          "likely_role": "Specialist or niche contributor, focusing on tasks that align with her existing skills.",
-          "collaboration_style": "Prefers independent work with minimal team interaction, may avoid conflict and social engagements.",
-          "influence_on_team": "May challenge the team's collaborative culture and adaptability to new technologies."
-        },
-        "development_opportunities": [
-          "Mentoring in project management tools and practices to improve organization and deadline adherence.",
-          "Training in public speaking and presentation skills to enhance communication within the team.",
-          "Encourage participation in team-building activities to foster better integration."
-        ],
-        "risk_factors": [
-          "Potential for increased team friction due to resistance to new technologies and team norms.",
-          "Risk of burnout or decreased productivity due to high neuroticism and low conscientiousness.",
-          "May struggle to adapt to the team's collaborative and innovative culture."
-        ]
-      },
-      "overall_recommendation": {
-        "status": "NOT RECOMMENDED",
-        "combined_score": 0.35,
-        "reasoning": "Significant compatibility concerns across multiple dimensions.",
-        "confidence_level": 0.9
-      }
-    },
-    {
-      "candidate_info": {
-        "id": "8d8dff84-7aeb-4fda-a497-0e941cd5d04e",
-        "name": "Mohammed ELASRI",
-        "position": "Senior Software Engineer",
-        "traits_source": "extracted",
-        "personality_traits": {
-          "openness": 0.85,
-          "conscientiousness": 0.9,
-          "extraversion": 0.75,
-          "agreeableness": 0.85,
-          "neuroticism": 0.25
-        }
-      },
-      "ai_analysis": {
-        "compatibility_score": 0.85,
-        "confidence_level": 0.9,
-        "summary": "Mohammed ELASRI is an excellent fit for the team, bringing a strong technical background, high conscientiousness, and a collaborative spirit. His openness to new technologies and methodical approach to project management will complement the team's existing strengths and drive innovation. However, his high agreeableness may require him to assert himself more in conflict situations.",
-        "strengths": [
-          "High openness to new technologies, which will drive innovation and keep the team updated with the latest trends.",
-          "Exceptional conscientiousness and methodical approach to project planning, ensuring high-quality deliverables and timely completion.",
-          "Strong communication skills and ability to present technical concepts to diverse audiences, fostering better collaboration and understanding across the team.",
-          "Collaborative spirit and enthusiasm for brainstorming sessions, which will enhance team creativity and problem-solving.",
-          "High agreeableness, which will help in building consensus and maintaining a harmonious team environment."
-        ],
-        "concerns": [
-          "May avoid conflict due to high agreeableness, potentially leading to unaddressed issues or suppressed dissenting opinions.",
-          "His methodical approach, while thorough, might be perceived as rigid by more spontaneous team members, potentially slowing down decision-making processes.",
-          "May need to adapt to the team's existing communication and project management tools, which could initially impact his productivity."
-        ],
-        "recommendations": [
-          "Encourage Mohammed to actively participate in conflict resolution and decision-making processes to leverage his technical expertise fully.",
-          "Pair him with Lucas Moreau for initial projects to balance his methodical approach with Lucas's more spontaneous and extroverted style.",
-          "Provide training or resources to help him quickly adapt to the team's existing tools and workflows.",
-          "Assign him mentorship responsibilities for junior developers to foster knowledge sharing and team cohesion."
-        ],
-        "team_dynamics_impact": {
-          "likely_role": "Technical leader and innovator, driving the team's adoption of new technologies and best practices.",
-          "collaboration_style": "Collaborative and inclusive, actively seeking input from team members and stakeholders, and fostering a culture of open communication.",
-          "influence_on_team": "Will enhance the team's technical prowess, drive innovation, and strengthen cross-functional collaboration. His methodical approach may also improve the team's project management practices."
-        },
-        "development_opportunities": [
-          "Encourage him to take on leadership roles in complex projects to further develop his strategic thinking and decision-making skills.",
-          "Provide opportunities for him to present his work at industry conferences or internal tech talks to enhance his public speaking and thought leadership skills.",
-          "Pair him with Sophie Martin for projects requiring high attention to detail and process optimization, allowing him to learn from her exceptional conscientiousness."
-        ],
-        "risk_factors": [
-          "Potential for conflict avoidance, which may hinder open and honest communication within the team.",
-          "Risk of over-reliance on his methodical approach, potentially leading to analysis paralysis or delayed decision-making.",
-          "May struggle with adapting to the team's existing culture and processes, initially impacting his integration and productivity."
-        ]
-      },
-      "overall_recommendation": {
-        "status": "HIGHLY RECOMMENDED",
-        "combined_score": 0.85,
-        "reasoning": "Strong compatibility across multiple assessment dimensions.",
-        "confidence_level": 0.9
-      }
-    },
-    {
-      "candidate_info": {
         "id": "95e954e6-74f6-425f-bba6-972cb410c797",
         "name": "Hamza KARZAZ",
         "position": "Software Engineer",
@@ -213,43 +98,44 @@
           "conscientiousness": 0.7,
           "extraversion": 0.4,
           "agreeableness": 0.85,
-          "neuroticism": 0.45
+          "neuroticism": 0.4
         }
       },
       "ai_analysis": {
         "compatibility_score": 0.65,
         "confidence_level": 0.85,
-        "summary": "Hamza Karzaz brings a strong work ethic and agreeableness to the team, which will foster a harmonious environment. However, his preference for independent work and lower extraversion may require some adjustments to integrate smoothly with the team's collaborative culture.",
+        "summary": "Hamza KARZAZ brings a strong sense of agreeableness and conscientiousness to the team, which will enhance collaboration and reliability. However, his preference for independent work and lower extraversion may pose challenges in a highly collaborative environment. With some adjustments, he could significantly contribute to the team's success.",
         "strengths": [
-          "High agreeableness will enhance team harmony and reduce conflicts.",
+          "High agreeableness will foster a harmonious work environment and ease integration.",
           "Moderate conscientiousness ensures a reliable and dedicated approach to tasks.",
-          "Openness to new experiences, though lower, is balanced by a willingness to learn new technologies quickly."
+          "Technical competence and willingness to learn new technologies quickly.",
+          "Strong sense of responsibility and attention to coding standards."
         ],
         "concerns": [
-          "Lower extraversion may limit active participation in team discussions and brainstorming sessions.",
-          "Preference for independent work could lead to reduced collaboration and information sharing.",
-          "Moderate neuroticism might affect stress management under tight deadlines or high-pressure situations."
+          "Preference for independent work may lead to reduced participation in team activities.",
+          "Lower extraversion might result in less proactive communication and collaboration.",
+          "May struggle with time management and estimation, as indicated by the Docker project experience."
         ],
         "recommendations": [
-          "Encourage Hamza to participate in team-building activities to foster stronger relationships.",
-          "Pair Hamza with more extroverted team members like Lucas for projects to balance his introverted tendencies.",
-          "Provide structured opportunities for Hamza to share his progress and ideas in team meetings.",
-          "Offer mentorship in time management and stress reduction techniques to help manage neuroticism."
+          "Encourage Hamza to participate in more team-building activities to foster stronger bonds.",
+          "Pair Hamza with more extraverted team members for projects to balance his independent work style.",
+          "Provide mentoring on time management and estimation techniques to improve project planning.",
+          "Assign Hamza tasks that leverage his strengths in reliability and coding standards, while gradually increasing his involvement in collaborative projects."
         ],
         "team_dynamics_impact": {
-          "likely_role": "The steady, reliable contributor who may need nudging to engage more actively in team discussions.",
-          "collaboration_style": "Prefers independent work but will collaborate when necessary, benefiting from structured team interactions.",
-          "influence_on_team": "Will likely bring a calm and agreeable presence, potentially reducing team tension but may need encouragement to contribute more actively."
+          "likely_role": "Reliable Contributor with a Focus on Technical Excellence",
+          "collaboration_style": "Prefers structured, independent work with minimal interruptions, but willing to collaborate when necessary.",
+          "influence_on_team": "Will bring a steady, reliable presence to the team, potentially enhancing the focus on coding standards and reliability. May need encouragement to engage more actively in team discussions and collaborative tasks."
         },
         "development_opportunities": [
-          "Mentorship in public speaking and presentation skills to enhance his ability to share ideas in team settings.",
-          "Training in agile methodologies to improve his collaboration and adaptability in a team environment.",
-          "Workshops on stress management and resilience to help him cope with high-pressure situations."
+          "Mentoring in project management and time estimation to improve planning and execution.",
+          "Encourage participation in team workshops and training sessions to enhance collaboration skills.",
+          "Provide opportunities for public speaking or presenting to build confidence in communicating ideas."
         ],
         "risk_factors": [
-          "Risk of becoming isolated within the team due to his preference for independent work.",
-          "Potential for reduced innovation and idea-sharing due to lower extraversion.",
-          "Possible challenges in meeting tight deadlines if stress management is not effectively addressed."
+          "Risk of becoming isolated within the team due to preference for independent work.",
+          "Potential for underestimating the time required for tasks, leading to delays.",
+          "May avoid conflict or difficult conversations, which could impact team cohesion."
         ]
       },
       "overall_recommendation": {
@@ -280,32 +166,32 @@
         "strengths": [
           "Elon's deep technical expertise and problem-solving skills can be valuable assets to the team.",
           "His independent work style may lead to innovative solutions when given the right projects.",
-          "Elon's low neuroticism suggests he can handle stress, which may be beneficial in high-pressure situations."
+          "Elon's low neuroticism might make him resilient under pressure, though this is mitigated by his high neuroticism score."
         ],
         "concerns": [
-          "Elon's low openness to new experiences may hinder his ability to adapt to new technologies and methodologies, which are crucial in a fast-paced tech environment.",
-          "His preference for working alone and reluctance to engage in team activities may disrupt the team's collaborative dynamics.",
-          "Elon's high neuroticism may lead to increased stress and potential conflicts within the team."
+          "Elon's low openness to new experiences may hinder his ability to adapt to new technologies and methodologies.",
+          "His preference for working alone could disrupt the team's collaborative dynamics and reduce knowledge sharing.",
+          "Elon's low agreeableness and conscientiousness may lead to conflicts and difficulties in meeting project deadlines and standards."
         ],
         "recommendations": [
-          "Assign Elon to projects that allow for more independent work while still requiring some level of collaboration.",
-          "Pair Elon with a mentor who can help him understand the importance of teamwork and adaptability.",
-          "Encourage Elon to participate in team-building activities to foster better integration and communication.",
-          "Provide clear guidelines and expectations for project planning and documentation to align with team standards."
+          "Assign Elon to projects that allow for a high degree of independence and minimal collaboration initially.",
+          "Pair Elon with a mentor who can help him understand the team's collaborative culture and the importance of adaptability.",
+          "Encourage Elon to participate in team-building activities and regular check-ins to foster better integration.",
+          "Provide clear guidelines and expectations for project management and documentation to align with team standards."
         ],
         "team_dynamics_impact": {
-          "likely_role": "Independent Contributor with Potential for Innovation",
-          "collaboration_style": "Prefers minimal interaction, may avoid team meetings and collaborative tasks.",
-          "influence_on_team": "May challenge the team's collaborative culture and adaptability to change."
+          "likely_role": "Independent Contributor with Potential for Conflict",
+          "collaboration_style": "Prefers solitary work, may resist team collaboration and communication norms.",
+          "influence_on_team": "Could disrupt team cohesion and innovation if not managed properly, but may also bring unique technical insights."
         },
         "development_opportunities": [
-          "Encourage Elon to take on leadership roles in small, independent projects to build his confidence and adaptability.",
-          "Provide training on effective communication and teamwork to help him integrate better with the team."
+          "Encourage Elon to take on small, collaborative projects to build his teamwork skills.",
+          "Provide training on the importance of adaptability and continuous learning in a tech environment."
         ],
         "risk_factors": [
-          "Potential for increased conflict due to Elon's reluctance to engage in team activities and adapt to new methodologies.",
-          "Risk of project delays or quality issues due to Elon's preference for minimal planning and documentation.",
-          "Possible strain on team morale if Elon's independent work style is not managed effectively."
+          "High risk of conflict with team members due to differing work styles and communication preferences.",
+          "Potential for project delays and quality issues due to Elon's low conscientiousness and resistance to planning and documentation.",
+          "Risk of stagnation in technical skills if Elon continues to resist learning new technologies."
         ]
       },
       "overall_recommendation": {
@@ -314,148 +200,25 @@
         "reasoning": "Significant compatibility concerns across multiple dimensions.",
         "confidence_level": 0.95
       }
-    },
-    {
-      "candidate_info": {
-        "id": "s5ed54se6-74f6-425f-fba6-972cb410coiu",
-        "name": "Lynda Dupont",
-        "position": "Software Engineer",
-        "traits_source": "extracted",
-        "personality_traits": {
-          "openness": 0.55,
-          "conscientiousness": 0.75,
-          "extraversion": 0.4,
-          "agreeableness": 0.7,
-          "neuroticism": 0.5
-        }
-      },
-      "ai_analysis": {
-        "compatibility_score": 0.65,
-        "confidence_level": 0.85,
-        "summary": "Lynda Dupont brings a steady, conscientious work ethic to the team, with a preference for stability and thoroughness. Her introverted nature and cautious approach to new technologies may require some adaptation, but she can contribute significantly to the team's reliability and attention to detail. Her fit is strongest with Sophie and Thomas, who share her conscientiousness and preference for structured work.",
-        "strengths": [
-          "Lynda's conscientiousness (0.75) aligns well with the team's average (0.84), ensuring she will maintain high standards of quality and reliability.",
-          "Her agreeableness (0.70) suggests she will be easy to work with and cooperative, fitting well with the team's generally agreeable nature (average 0.76).",
-          "Lynda's preference for thorough documentation and testing aligns with the team's focus on quality, as seen in Thomas's high conscientiousness (0.98).",
-          "Her openness to new ideas, while lower (0.55), is balanced by her willingness to learn and adapt, as shown in her approach to new technologies.",
-          "Lynda's neuroticism (0.50) is higher than the team's average (0.29), which may drive her to be more detail-oriented and vigilant in her work."
-        ],
-        "concerns": [
-          "Lynda's lower extraversion (0.40) may make her less inclined to engage in spontaneous brainstorming sessions or social team activities, potentially impacting team cohesion.",
-          "Her preference for sticking with known technologies could slow down the adoption of new tools or frameworks, which might frustrate more open team members like Camille (0.95) and Antoine (0.90).",
-          "Lynda's discomfort with public speaking may limit her effectiveness in team presentations or client meetings, which could be a challenge in collaborative projects."
-        ],
-        "recommendations": [
-          "Pair Lynda with more extroverted team members like Lucas (0.88) for collaborative tasks to balance her introverted nature and encourage more open communication.",
-          "Encourage Lynda to participate in team-building activities to help her integrate socially and build rapport with her colleagues.",
-          "Provide Lynda with opportunities to gradually improve her public speaking skills, such as presenting small updates in team meetings.",
-          "Assign Lynda tasks that leverage her strengths in detail-oriented work and reliability, while gradually exposing her to new technologies to broaden her skill set."
-        ],
-        "team_dynamics_impact": {
-          "likely_role": "Reliable and detail-oriented contributor, likely to take on tasks that require thoroughness and attention to detail.",
-          "collaboration_style": "Prefers structured communication and may need encouragement to engage in more spontaneous or creative discussions. Likely to work well in one-on-one settings or small groups.",
-          "influence_on_team": "Will likely reinforce the team's focus on quality and reliability. May introduce a more cautious approach to change, which could be beneficial in stabilizing processes but might slow down innovation."
-        },
-        "development_opportunities": [
-          "Mentor Lynda in public speaking and presentation skills to enhance her ability to communicate her ideas effectively in team settings.",
-          "Encourage Lynda to take on small projects involving new technologies to gradually build her comfort level with change and innovation.",
-          "Provide Lynda with opportunities to lead small tasks or sub-teams to develop her leadership skills and confidence in collaborative environments."
-        ],
-        "risk_factors": [
-          "Lynda's higher neuroticism (0.50) may lead to increased stress or anxiety in high-pressure situations, which could impact her performance and team morale.",
-          "Her lower openness (0.55) might make her resistant to change, potentially causing friction with more innovative team members like Camille and Antoine.",
-          "Lynda's discomfort with public speaking could limit her ability to represent the team in client meetings or presentations, which might affect the team's external communication effectiveness."
-        ]
-      },
-      "overall_recommendation": {
-        "status": "CONDITIONAL",
-        "combined_score": 0.65,
-        "reasoning": "Moderate compatibility - recommend additional evaluation or targeted team integration.",
-        "confidence_level": 0.85
-      }
-    },
-    {
-      "candidate_info": {
-        "id": "e46f93a6-79af-48d9-a292-acc648b1d99b",
-        "name": "Amine Marzouki",
-        "position": "Software Engineer",
-        "traits_source": "extracted",
-        "personality_traits": {
-          "openness": 0.9,
-          "conscientiousness": 0.95,
-          "extraversion": 0.75,
-          "agreeableness": 0.85,
-          "neuroticism": 0.2
-        }
-      },
-      "ai_analysis": {
-        "compatibility_score": 0.85,
-        "confidence_level": 0.9,
-        "summary": "Amine Marzouki is an excellent fit for the team, bringing high openness, conscientiousness, and agreeableness that will complement the existing members. His strong communication skills and adaptability will enhance team dynamics and drive innovation. However, his high conscientiousness and low neuroticism might need to be balanced with the team's varied emotional responses to stress.",
-        "strengths": [
-          "High openness and conscientiousness align well with the team's average, promoting innovation and reliability.",
-          "Strong communication skills will bridge technical and non-technical stakeholders, enhancing overall team effectiveness.",
-          "Proven adaptability and leadership in change management will drive the team's ability to pivot and innovate.",
-          "Detail-oriented project planning and risk management skills will improve the team's efficiency and reliability.",
-          "High agreeableness will foster a collaborative and harmonious team environment."
-        ],
-        "concerns": [
-          "Potential mismatch in emotional responses to stress with team members like Thomas, who has lower extraversion and higher neuroticism.",
-          "Risk of over-reliance on Amine's strengths, potentially leading to burnout or underutilization of other team members' skills.",
-          "May need to adapt to the team's existing communication and project management practices, which might be less structured than his preferred approach."
-        ],
-        "recommendations": [
-          "Pair Amine with Lucas or Camille for initial projects to leverage their complementary extraversion and openness traits.",
-          "Encourage Amine to mentor Sophie and Thomas in advanced project management techniques to distribute his expertise.",
-          "Facilitate regular team-building activities to integrate Amine's communication style and ensure all team members feel heard.",
-          "Monitor Amine's workload and encourage delegation to prevent burnout and ensure balanced team contribution."
-        ],
-        "team_dynamics_impact": {
-          "likely_role": "Innovator and facilitator, driving change and improving communication and project management practices.",
-          "collaboration_style": "Collaborative and inclusive, with a focus on detailed planning and open communication channels.",
-          "influence_on_team": "Positive impact on team cohesion, innovation, and efficiency, with a potential shift towards more structured project management."
-        },
-        "development_opportunities": [
-          "Encourage Amine to develop emotional intelligence skills to better connect with team members like Thomas and Sophie.",
-          "Provide opportunities for Amine to lead cross-functional projects, further honing his communication and leadership skills.",
-          "Facilitate reverse mentoring, where Amine learns from team members' unique strengths and perspectives."
-        ],
-        "risk_factors": [
-          "Potential for Amine to become overly dominant in decision-making processes due to his strong skills and confidence.",
-          "Risk of team members feeling overshadowed or undervalued if Amine's contributions are not balanced with others' growth.",
-          "Possible resistance to change from team members who prefer established practices over Amine's innovative approaches."
-        ]
-      },
-      "overall_recommendation": {
-        "status": "HIGHLY RECOMMENDED",
-        "combined_score": 0.85,
-        "reasoning": "Strong compatibility across multiple assessment dimensions.",
-        "confidence_level": 0.9
-      }
     }
   ],
   "team_insights": {
     "candidate_pool_summary": {
-      "average_compatibility": 0.617,
-      "best_compatibility": 0.85,
-      "compatibility_range": 0.5,
-      "candidates_above_threshold": 2
+      "average_compatibility": 0.5,
+      "best_compatibility": 0.65,
+      "compatibility_range": 0.3,
+      "candidates_above_threshold": 0
     },
     "top_candidates": [
-      {
-        "name": "Mohammed ELASRI",
-        "compatibility": 0.85,
-        "recommendation": "HIGHLY RECOMMENDED"
-      },
-      {
-        "name": "Amine Marzouki",
-        "compatibility": 0.85,
-        "recommendation": "HIGHLY RECOMMENDED"
-      },
       {
         "name": "Hamza KARZAZ",
         "compatibility": 0.65,
         "recommendation": "CONDITIONAL"
+      },
+      {
+        "name": "Elon Musk",
+        "compatibility": 0.35,
+        "recommendation": "NOT RECOMMENDED"
       }
     ]
   }

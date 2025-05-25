@@ -242,9 +242,31 @@ async def analyze_compatibility(request: CompatibilityAnalysisRequest):
             candidates_data_list=candidates_data_list
         )
         
+        # Save results to file before auto-sync
+        try:
+            # Use the same path resolution as AI assistant to ensure consistency
+            data_file_path = os.getenv("COMPATIBILITY_SCORES_FILE")
+            if data_file_path:
+                output_file = data_file_path
+            elif os.path.exists("/app/data/"):  # Docker path
+                output_file = "/app/data/compatibility_scores.json"
+            else:  # Local development path
+                output_file = "data/compatibility_scores.json"
+                # Ensure data directory exists for local development
+                os.makedirs("data", exist_ok=True)
+            
+            compatibility_analyzer.save_results(results, output_file)
+            logger.info(f"✅ Results saved to {output_file}")
+        except Exception as save_e:
+            logger.error(f"❌ Error saving results: {save_e}")
+            # Continue with auto-sync even if save fails
+        
         # Auto-sync candidates to Weaviate if AI assistant is available and auto-sync is enabled
         if ai_assistant and ai_assistant.auto_sync:
             try:
+                logger.info("⏳ Waiting 2 seconds before auto-sync...")
+                import asyncio
+                await asyncio.sleep(2)  # Wait 2 seconds for file to be properly written
                 logger.info("🔄 Auto-syncing candidates to Weaviate...")
                 sync_success = ai_assistant.sync_candidates_from_file()
                 if sync_success:
