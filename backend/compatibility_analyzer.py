@@ -28,7 +28,7 @@ import random
 
 from dotenv import load_dotenv
 from mistralai import Mistral
-from openai import OpenAI
+# from openai import OpenAI
 
 # Import our custom modules
 from rate_limiter import RateLimiter
@@ -49,15 +49,15 @@ class CompatibilityAnalyzer:
         """Initialize the analyzer with API configuration and rate limiting."""
         load_dotenv()
         self.mistral_api_key = os.getenv('MISTRAL_API_KEY')
-        self.openai_api_key = os.getenv('OPENAI_API_KEY')
+        # self.openai_api_key = os.getenv('OPENAI_API_KEY')
 
         if not self.mistral_api_key:
             raise ValueError("MISTRAL_API_KEY environment variable is not set. Please add it to your .env file or set it as an environment variable.")
-        if not self.openai_api_key:
-            raise ValueError("OPENAI_API_KEY environment variable is not set. Please add it to your .env file or set it as an environment variable.")
+        # if not self.openai_api_key:
+        #     raise ValueError("OPENAI_API_KEY environment variable is not set. Please add it to your .env file or set it as an environment variable.")
         try:
-            #self.client = Mistral(api_key=self.mistral_api_key)
-            self.client = OpenAI(api_key=self.openai_api_key, base_url=os.getenv('OPENAI_BASE_URL'))
+            self.client = Mistral(api_key=self.mistral_api_key)
+            # self.client = OpenAI(api_key=self.openai_api_key, base_url=os.getenv('OPENAI_BASE_URL'))
             logger.info("Successfully initialized Mistral AI client")
         except Exception as e:
             raise ValueError(f"Failed to initialize Mistral AI client: {str(e)}")
@@ -331,8 +331,8 @@ class CompatibilityAnalyzer:
             self.rate_limiter.wait_if_needed()
             
             response = self._make_api_request_with_retry(
-                #model=os.getenv('MISTRAL_MODEL', 'mistral-small-latest'),
-                model=os.getenv('OPENAI_MODEL', 'deepseek-chat'),
+                model=os.getenv('MISTRAL_MODEL', 'mistral-small-latest'),
+                # model=os.getenv('OPENAI_MODEL', 'deepseek-chat'),
                 messages=[
                     {
                         "role": "system", 
@@ -340,7 +340,6 @@ class CompatibilityAnalyzer:
                     },
                     {"role": "user", "content": prompt}
                 ],
-                response_format={"type": "json_object"},
                 temperature=0.3,
                 max_tokens=2000
             )
@@ -359,8 +358,8 @@ class CompatibilityAnalyzer:
         """Make API request with retry logic for rate limiting."""
         for attempt in range(max_retries):
             try:
-                #response = self.client.chat.complete(**kwargs)
-                response = self.client.chat.completions.create(**kwargs)
+                response = self.client.chat.complete(**kwargs)
+                # response = self.client.chat.completions.create(**kwargs)
                 return response
             except Exception as e:
                 error_str = str(e).lower()

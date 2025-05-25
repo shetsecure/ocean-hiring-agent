@@ -11,12 +11,16 @@ This script checks:
 import os
 import weaviate
 from dotenv import load_dotenv
+from pathlib import Path
 
 def test_weaviate_connection():
     """Test basic Weaviate connection."""
     print("🔧 Testing Weaviate Connection...\n")
     
-    # Load environment variables
+    # Load environment variables - look in parent directory first
+    env_path = Path(__file__).parent.parent / '.env'
+    load_dotenv(env_path)
+    # Fallback to default search
     load_dotenv()
     
     # Check environment variables

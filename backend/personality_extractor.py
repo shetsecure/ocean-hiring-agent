@@ -84,14 +84,13 @@ class PersonalityTraitsExtractor:
                     """
             
             response = self._make_api_request_with_retry(
-                #model=os.getenv('MISTRAL_MODEL', 'mistral-small-latest'),
-                model=os.getenv('OPENAI_MODEL', 'deepseek-chat'),
+                model=os.getenv('MISTRAL_MODEL', 'mistral-small-latest'),
+                # model=os.getenv('OPENAI_MODEL', 'deepseek-chat'),
                 
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
                 ],
-                response_format={"type": "json_object"},
                 temperature=0.1
             )
             
@@ -109,8 +108,8 @@ class PersonalityTraitsExtractor:
         """Make API request with retry logic for rate limiting."""
         for attempt in range(max_retries):
             try:
-                #response = self.client.chat.complete(**kwargs)
-                response = self.client.chat.completions.create(**kwargs)
+                response = self.client.chat.complete(**kwargs)
+                # response = self.client.chat.completions.create(**kwargs)
                 return response
             except Exception as e:
                 error_str = str(e).lower()

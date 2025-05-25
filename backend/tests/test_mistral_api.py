@@ -11,6 +11,7 @@ import time
 from datetime import datetime
 from dotenv import load_dotenv
 from mistralai import Mistral
+from pathlib import Path
 
 def test_mistral_connection():
     """Test basic Mistral API connection and functionality."""
@@ -18,7 +19,10 @@ def test_mistral_connection():
     print("🔑 Testing Mistral API Connection...")
     print("=" * 50)
     
-    # Load environment variables
+    # Load environment variables - look in parent directory first
+    env_path = Path(__file__).parent.parent / '.env'
+    load_dotenv(env_path)
+    # Fallback to default search
     load_dotenv()
     
     # Get API key
@@ -98,7 +102,12 @@ def test_rag_prompt():
     print("\n🧠 Testing RAG-style Analysis Prompt...")
     print("=" * 50)
     
+    # Load environment variables - look in parent directory first
+    env_path = Path(__file__).parent.parent / '.env'
+    load_dotenv(env_path)
+    # Fallback to default search
     load_dotenv()
+    
     api_key = os.getenv("MISTRAL_API_KEY")
     
     if not api_key:

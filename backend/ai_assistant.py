@@ -351,9 +351,17 @@ class AIAssistant:
             List of ranked candidates with LLM analysis
         """
         try:
+            # If no candidates found by vector search, return empty list
+            if not candidates:
+                logger.warning(f"⚠️ No candidates found for query: {query}")
+                return []
+            
+            # Sort candidates deterministically to ensure consistent input order
+            candidates_sorted = sorted(candidates, key=lambda x: (x['name'], x['compatibility_score']), reverse=True)
+            
             # Prepare candidate data for LLM analysis
             candidates_data = ""
-            for i, candidate in enumerate(candidates, 1):
+            for i, candidate in enumerate(candidates_sorted, 1):
                 traits = candidate["personality_traits"]
                 candidates_data += f"""
 {i}. {candidate['name']} ({candidate['position']})
@@ -382,6 +390,7 @@ INSTRUCTIONS:
 3. Rank candidates based on how well their actual personality scores match the query intent
 4. Return EXACTLY the top {limit} candidates in order of relevance
 5. For each candidate, provide a brief explanation of why they fit the query
+6. ALWAYS return at least one candidate if any are provided, even if the match isn't perfect
 
 RESPONSE FORMAT (JSON):
 {{
@@ -404,7 +413,7 @@ Focus on NUMERICAL personality trait scores over text descriptions. Be precise a
             response = self.mistral_client.chat.complete(
                 model=self.ai_model,
                 messages=messages,
-                temperature=0.1,  # Low temperature for consistent analysis
+                temperature=0.05,  # Even lower temperature for maximum consistency
                 max_tokens=1000
             )
             
@@ -421,13 +430,13 @@ Focus on NUMERICAL personality trait scores over text descriptions. Be precise a
                     raise ValueError("No JSON found in LLM response")
             except:
                 # Fallback: Parse text response manually
-                llm_analysis = self._parse_text_response(llm_content, candidates, limit)
+                llm_analysis = self._parse_text_response(llm_content, candidates_sorted, limit)
             
             # Map LLM rankings back to full candidate data
             ranked_results = []
             for llm_candidate in llm_analysis.get("ranked_candidates", []):
                 # Find matching candidate
-                for candidate in candidates:
+                for candidate in candidates_sorted:
                     if candidate["name"] == llm_candidate["name"]:
                         result = candidate.copy()
                         result["llm_rank"] = llm_candidate["rank"]
@@ -436,13 +445,19 @@ Focus on NUMERICAL personality trait scores over text descriptions. Be precise a
                         ranked_results.append(result)
                         break
             
-            logger.info(f"🤖 LLM analyzed {len(candidates)} candidates, ranked top {len(ranked_results)}")
+            # If no results from LLM, fallback to original sorted order
+            if not ranked_results:
+                logger.warning(f"⚠️ LLM returned no results, using fallback sorting")
+                ranked_results = candidates_sorted[:limit]
+            
+            logger.info(f"🤖 LLM analyzed {len(candidates_sorted)} candidates, ranked top {len(ranked_results)}")
             return ranked_results[:limit]
             
         except Exception as e:
             logger.error(f"❌ LLM analysis failed: {e}")
-            # Fallback to original vector search results
-            return candidates[:limit]
+            # Fallback to original vector search results with deterministic sorting
+            candidates_sorted = sorted(candidates, key=lambda x: (x['name'], x['compatibility_score']), reverse=True)
+            return candidates_sorted[:limit]
     
     def _parse_text_response(self, llm_content: str, candidates: List[Dict], limit: int) -> Dict[str, Any]:
         """
@@ -485,9 +500,18 @@ Focus on NUMERICAL personality trait scores over text descriptions. Be precise a
                 group_by="recommendation"
             )
             
+            # Convert recommendations groups to dictionary
+            recommendations_dict = {}
+            if hasattr(recommendations, 'groups') and recommendations.groups:
+                for group in recommendations.groups:
+                    if hasattr(group, 'grouped_by') and hasattr(group, 'total_count'):
+                        # grouped_by is an object with properties, not a dict
+                        key = getattr(group.grouped_by, 'recommendation', 'Unknown')
+                        recommendations_dict[key] = group.total_count
+            
             return {
                 "total_candidates": total_count.total_count,
-                "recommendations_distribution": recommendations.groups if hasattr(recommendations, 'groups') else {},
+                "recommendations_distribution": recommendations_dict,
                 "collection_name": self.collection_name,
                 "timestamp": datetime.now().isoformat()
             }

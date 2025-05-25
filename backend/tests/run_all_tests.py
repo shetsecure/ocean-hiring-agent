@@ -18,12 +18,16 @@ def run_test_file(test_file):
     print(f"{'='*60}")
     
     try:
-        # Run the test file as a subprocess
+        # Get the directory containing the test file
+        test_dir = Path(test_file).parent.absolute()
+        
+        # Run the test file as a subprocess, ensuring we're in the right directory
         result = subprocess.run(
             [sys.executable, test_file], 
             capture_output=True, 
             text=True, 
-            timeout=300  # 5 minute timeout
+            timeout=300,  # 5 minute timeout
+            cwd=test_dir  # Set working directory to test directory
         )
         
         # Print the output
